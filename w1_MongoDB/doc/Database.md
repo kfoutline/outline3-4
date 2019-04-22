@@ -130,7 +130,7 @@ MongoDB是一个基于分布式文件存储的数据库，由C++语言编写，�
 * 下载地址：https://www.mongodb.com/download-center/community
 * 安装路径尽量简单，不要有中文
 
-### 配置数据库
+### 配置数据库（V3.6）
 * 配置环境变量
 >安装mongodb默认自动配置环境变量，方便在命令行中使用相关命令
 
@@ -154,16 +154,17 @@ MongoDB是一个基于分布式文件存储的数据库，由C++语言编写，�
     ```bash
         mongod.exe --config c:\mongodb\mongod.cfg --service --serviceName MongoDB --install
     ```
+>PS: MongoDB4.0后默认安装windows服务
 
-
-### 连接数据库
+### 命令行操作
+#### 连接数据库
 * mongo 连接到数据库并进行操作
 * mongod 显示数据库信息
 
-### 常用命令
+#### 常用命令（命令行）
 >输入help可以看到基本操作命令
 
-#### 数据库操作(Database)
+##### 数据库操作(Database)
 * 查看所有数据库： `show dbs`
 * 创建/切换数据库: `use DBNAME`
 >如果数据库不存在，则创建数据库，否则切换数据库。
@@ -174,7 +175,7 @@ MongoDB是一个基于分布式文件存储的数据库，由C++语言编写，�
 * 删除当前使用数据库: `db.dropDatabase()`
 
 
-#### 集合操作(Collection)
+##### 集合操作(Collection)
 >利用use DBNAME 切换到当前数据库后，可以进行集合与文档的操作
 
 * 创建集合：
@@ -185,9 +186,8 @@ MongoDB是一个基于分布式文件存储的数据库，由C++语言编写，�
 * 删除集合：
     * `db.NAME.drop();`
 
-#### 文档操作(Document)
->文档就是数据，这里的所有操作都是针对数据
-* 格式：db.NAME.方法()
+##### 文档操作(Document)
+>文档就是数据，这里的所有操作都是针对数据，格式：db.NAME.方法()
 
 * 增（插入数据）： 
     * insertOne(document)
@@ -218,20 +218,22 @@ MongoDB是一个基于分布式文件存储的数据库，由C++语言编写，�
 * 查（查询数据）： 
     * 查询所有：`db.NAME.find()`
     * 按条件查询（支持多条件）：`db.NAME.find(query)`
-    * 查询第一条（支持条件）：`db.NAME.findOne(query)`
+    * 查询第一条（只获取第一条）：`db.NAME.findOne(query)`
+
+    >find()方法一般后一般使用toArray()方法把结果转成数组
 
     ```js
         //查询user下所有数据
-        db.user.find();
+        db.user.find().toArray((result)=>{});
         
         // 查询user下年龄为38的
-        db.user.find({age:38})
+        db.user.find({age:38}).toArray()
 
         // 查询user下年龄大于38的
-        db.user.find({age:{$gt:38}})
+        db.user.find({age:{$gt:38}}).toArray()
 
         //利用pretty()方法格式化结果
-        db.user.find().pretty();
+        db.user.find().toArray().pretty();
     ```
 
 #### 查询条件
@@ -274,6 +276,16 @@ MongoDB是一个基于分布式文件存储的数据库，由C++语言编写，�
 
 > 三个放在一起使用的时候，执行的顺序是先 sort(), 然后是 skip()，最后是 limit()
 
+```js
+    // 把类型为字String的价格按数字排序
+    db.goods.find().collation({numericOrdering:true}).sort({price:1})
+
+    // 根据某个值修改文档中的另一个值（把price的值改成sale_price的8折）
+    db.goods.find({price:0}).forEach(item=>{                
+        db.goods.updateOne({_id:item._id},{$set:{price: item.sale_price*0.8}})
+    })
+```
+
 ### NodeJS中使用mongodb
 #### 安装mongodb模块
 ```bash
@@ -287,8 +299,7 @@ MongoDB是一个基于分布式文件存储的数据库，由C++语言编写，�
     const mongodb = require('mongodb');
     const MongoClient = mongodb.MongoClient;
 
-    //使用数据库也可以使用以下方式
-    //1.连接mongoDB
+    //连接mongoDB
     MongoClient.connect("mongodb://localhost:27017", function(err, client) {
       if(err) throw err;
         // 连接数据库，无则自动创建
@@ -308,15 +319,15 @@ MongoDB是一个基于分布式文件存储的数据库，由C++语言编写，�
 
 
 ```javascript
-    dbase.createCollection('site', function (err, res) {
+    db.createCollection('site', function (err, res) {
         if (err) throw err;
         console.log("创建集合!");
-        db.close();
-    });
+        db.clo
+    });se();
 ```
 
 #### 文档操作
-> 同上 <文档操作(Document)>
+> 同上命令行操作 <文档操作(Document)>
 
 ### MongoDB的导入导出
 * 导出mongoexport

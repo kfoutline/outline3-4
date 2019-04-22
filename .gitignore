@@ -1,9 +1,10 @@
-##过滤文件夹
+﻿##过滤文件夹
 node_modules/
 .svn/
 .git/
 
 ##过滤文件
+package-lock.json
 *.zip
 *.tgz
 *.mp3
