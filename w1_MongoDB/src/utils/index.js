@@ -15,6 +15,30 @@ function formatData({data=[],msg='success',status=200}={}){
     }
 }
 
+/**
+ * 利用crypto加密解密
+ * 
+ */
+const crypto = require('crypto');
+
+ // 加密
+function encrypt(data, key,{type='aes-256-ecb',outType='base64',encode='utf8'}={}) {
+    const cipher = crypto.createCipher(type, key);
+    // cipher.setAutoPadding(true);
+    var crypted = cipher.update(data, encode, outType);
+    crypted = cipher.final(outType);
+    return crypted;
+}
+// 解密
+function decrypt(encrypted, key,{type='aes-256-ecb',outType='base64',encode='utf8'}={}) {
+    const decipher = crypto.createDecipher(type, key);
+    var decrypted = decipher.update(encrypted, outType, encode);
+    decrypted = decipher.final(encode);
+    return decrypted;
+}
+
 module.exports = {
-    formatData
+    formatData,
+    encrypt,
+    decrypt
 }

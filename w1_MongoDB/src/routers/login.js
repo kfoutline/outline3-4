@@ -24,7 +24,7 @@ Router.post('/',async (req,res)=>{
     // decrypted += decipher.final('utf-8');
     const cipher = crypto.createCipher('aes192', key);
     let crypted = cipher.update(password, 'utf-8', 'hex');
-    crypted += cipher.final('hex');
+    crypted = cipher.final('hex');
 
 
     let result;

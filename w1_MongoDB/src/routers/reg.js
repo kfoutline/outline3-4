@@ -10,17 +10,16 @@ const {formatData} = require('../utils');
 // 引入密钥
 const {key} = require('../config.json');
 
-// 指定的算法与密码来创建cipher对象
-const cipher = crypto.createCipher('aes192', key);
 
 Router.post('/',async (req,res)=>{
     // 对密码进行加密
     let password = req.body.password;
-
+    
+    // 指定的算法与密码来创建cipher对象
+    const cipher = crypto.createCipher('aes192', key);
     // 使用该对象的update方法来指定需要被加密的数据
     let crypted = cipher.update(password, 'utf-8', 'hex');
-
-    crypted += cipher.final('hex');
+    crypted = cipher.final('hex');
 
     let result;
     try{

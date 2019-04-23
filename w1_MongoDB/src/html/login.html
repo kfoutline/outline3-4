@@ -8,7 +8,8 @@
     <title>登录</title>
     <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css"
         integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous" />
-</head>
+    <script src="crypto-js.js"></script>
+    </head>
 
 <body>
     <div class="container-fluid pt-5">
@@ -32,7 +33,7 @@
     <script>
         (() => {
             // 避免全局环境污染
-            let btnReg = document.querySelector('.btnLogin');
+            let btnLogin = document.querySelector('.btnLogin');
             let username = document.querySelector('#username');
             let password = document.querySelector('#password');
 
@@ -50,7 +51,7 @@
             }
 
 
-            btnReg.onclick = () => {
+            btnLogin.onclick = () => {
                 let _username = username.value.trim();
                 let _password = password.value.trim();
 
@@ -60,12 +61,15 @@
                     return false;
                 }
 
+                let crypted = CryptoJS.AES.encrypt(_password,'laoxie')
+                console.log(crypted.toString())
 
 
 
-                xhr.open('post', '/login', true);
-                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-                xhr.send(`username=${_username}&password=${_password}`);
+
+                // xhr.open('post', '/login', true);
+                // xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                // xhr.send(`username=${_username}&password=${_password}`);
             }
 
 
