@@ -175,7 +175,7 @@
   2. 子组件内部触发自定义事件并传递参数
   >this.$emit('show',100) 会触发父组件的事件处理函数handler，从而实现数据修改
 
-* 方式二：
+* 方式二（简单数据可采用方案）：
   1. 可以利用v-bind:xx.sync修饰符（如下color属性）
   2. 子组件调用`this.$emit('update:xx',val)`触发更新
 
@@ -230,9 +230,9 @@
 * 组件A -> 父组件 -> 组件B
   > 组件A与组件B具有共同父级
 
-### 无关联组件间传参
+### 无关联/多层级组件间传参
 
-> 利用一个Vue实例作为中间桥梁实现传参（如：组件A与组件B无任何联系）
+> 利用一个Vue实例作为中间桥梁实现传参（如：组件A与组件B无任何联系或层级很深）
 
 - 接收方（组件B）：自定义事件
 - 传输方（组件A）：$emit()
@@ -283,23 +283,23 @@
 ## 插槽内容
 
 ### 利用组件内容进行通讯（父->子）
+> 在组件模板中利用内置组件`<slot></slot>`来承载组件内容,否则它的内容都会被忽略（被模板内容覆盖）
 
 * 默认插槽default
-  > 在组件模板中利用内置组件`<slot></slot>`来承载组件内容,否则它的内容都会被忽略（被模板内容覆盖）
 
   ```html
-    <!-- 使用指令 -->
+    <!-- 使用组件 -->
     <nav-link url="/home">首页</nav-link>
 
-    <!-- 定义指令 -->
+    <!-- 定义组件 -->
     <script>
       Vue.component('nav-link',{
         props:['url']
-        //以下写法，组件内容“首页”，会被template的内容覆盖掉，
+        //以下template写法，组件内容“首页”，会被template的内容覆盖掉，
         //最终解析为：<a href="/home"><span>Home</span></a>
         //template:`<a :href="url"><span>Home</span></a>`
 
-        // 可以用<slot></slot>保留内容和设置默认值
+        // 解决方案：可以用<slot></slot>保留内容和设置默认值
         // 最终解析为：<a href="/home">首页<span>Home</span></a>
         template:`<a :href="url"><slot></slot><span>Home</span></a>`
       });
@@ -309,7 +309,7 @@
 * 具名插槽：
   * 模板内容：给`<slot/>`组件命名（设置name属性）
   * 组件内容：设置slot属性，实现内容精准显示到模板具体位置
-  > Vue2.6+已经废除slot属性，改成`v-slot:name`（只能用在template元素上）
+  > Vue2.6+已经废除slot属性，改成`v-slot:name`（只能用在template元素或组件上）
 
 ```html
   <!-- 组件模板内容 -->
@@ -343,7 +343,7 @@
 > 利用作用域插槽(slot-scope)实现把组件模板template中的数据传到组件内容中处理，实现特殊定制（PS：Vue2.6+已废除该属性，改为`v-slot:name`格式，简写：#name）
 
 ```html
-  <!-- 组件模板 -->
+  <!-- mynav组件模板 -->
   <div class="box">
     <slot :msg="msg" :username="username">{{username}}，{{msg}}</slot>
     <slot name="footer" title="播放器" :player="player">{{player}}</slot>

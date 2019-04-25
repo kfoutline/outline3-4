@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>响应式系统</title>
+    <script src="js/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <p v-for="(val,key) in score">{{key}} - {{val}}</p>
+    </div>
+    <script>
+        /**
+            响应式系统
+                * 初始化：自动把一下数据变成响应式属性
+                    * data
+                    * computed
+                    * methods
+                * 实例化后添加
+                    * Vue.set(target,key,val)
+                    * this.$set(target,key,val)
+                * 删除响应式属性
+                    * Vue.delete(target,key)
+                    * vm.$delete(target,key)
+        */
+
+        // Vue.config.productionTip = false;
+
+        let vm = new Vue({
+            el:'#app',
+            data:{
+                score:{
+                    english:100,
+                    chinese:120
+                }
+            },
+            computed:{
+                username(){
+                    return 'laoxie'
+                }
+            },
+            methods:{
+                getName(){
+                    return this.username;
+                }
+            }
+        });
+
+        // 非响应式属性
+        // vm.score.math = 108;
+
+        // 响应式属性
+        vm.$set(vm.score,'math',118);
+
+        // Vue 不允许动态添加根级别的响应式属性
+        // vm.$set(vm,'history',80);//报错
+        // vm.$set(vm.$data,'history',80);//报错
+
+        // 同时设置多个响应式属性
+        // vm.score = Object.assign({},vm.score,{history:80,'front-end':120})
+        vm.score = {...vm.score,a:10,b:20}
+        
+    </script>
+</body>
+</html>

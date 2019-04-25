@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>extend实现构造器</title>
+    <script src="js/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <div class="profile"></div>
+        <div class="footer"></div>
+    </div>
+    <script>
+        /**
+            let myVue = Vue.extend(options) => Vue实例构造器(包含部分选项)
+                * 用于创建实例： new myVue()
+                    * 会继承options中的配置
+                * 用于创建组件： 
+                    * Vue.component(name,myVue);
+                    * 在options中添加name属性（内部自动把name值用于定义一个组件）
+        */
+        
+        let Profile = Vue.extend({
+            name:'laoxie',//if(name) Profile.options.components[name] = Profile
+            data(){
+                return{
+                    title:'laoxie'
+                }
+            },
+            template:`<div>Profile</div>`
+        });
+
+        let p1 = new Profile({
+            el:'.profile',
+            data:{
+                age:10
+            },
+            template:`<div>
+                <h1>profile</h1>
+                <laoxie/>
+            </div>`
+        })
+
+        let p2 = new Profile({
+            el:'.footer'
+        })
+    </script>
+</body>
+</html>

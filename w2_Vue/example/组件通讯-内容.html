@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>组件通讯-内容</title>
+    <script src="js/vue.js"></script>
+    <style>
+        body{margin:0;}
+        header{display:flex;border-bottom:2px solid #ddd;}
+        header h1{flex:1;text-align:center;}
+        header .icon{width:50px;background-color:rgba(0,0,0,.3)}
+    </style>
+</head>
+<body>
+    <div id="app">
+        <my-header>
+            <!-- backProps:{idx:10,icon:'xxx.png'} -->
+            <template v-slot:icon-back="backProps">back{{backProps}}</template>
+            <template v-slot:icon-setting="settingProps">设置</template>
+            头部标题
+        </my-header>
+    </div>
+    <template id="myHeader">
+        <header>
+            <div class="icon back"><slot name="icon-back" :idx="10" icon="xxx.png"/></div>
+            <h1><slot/></h1>
+            <div class="icon setting"><slot name="icon-setting"></slot></div>
+        </header>
+    </template>
+    <script>
+        /**
+            组件通讯-内容
+                * 外->内：slot
+                    * 默认插槽
+                        * 组件标签内容自动写入<slot/>
+                    * 具名插槽
+                        * 组件模板：给<slot/>设置name属性：<slot name="myheader"/>
+                        * 组件内容：<template v-slot:myheader>xxx</template>,xxx自动写入相应slot的所在位置
+                * 内->外:
+                    * 给v-slot添加属性值：<template v-slot:myheader="headProps">xxx</template>
+                    * headProps为保存模板中对应<slot/>组件所有属性的对象
+
+        */
+       const myHeader = {
+           template:'#myHeader'
+       }
+
+       const icon = {
+           template:'<div class="myicon">myicon<slot/></div>'
+       }
+
+        let vm = new Vue({
+            el:'#app',
+            components:{
+                myHeader,
+                icon
+                // myBody,
+                // myFooter
+            }
+        })
+        
+    </script>
+</body>
+</html>

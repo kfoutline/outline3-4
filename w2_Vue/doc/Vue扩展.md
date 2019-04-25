@@ -5,7 +5,7 @@
 > 混入 (mixins) 一般用于组件选项的复用（所有属性与组件选项一致）。并以一定的合并规则混入到组件中
 
 * 全局mixin：`Vue.mixin(options)`
-  > 全局注册一个混入，会影响后面所有创建的每个 Vue 实例/组件
+  > 全局注册一个混入，会影响后面所有创建的每个 Vue 实例/组件（影响较大，一般用于插件编写）
 
   ```js
     Vue.mixin({
@@ -23,7 +23,8 @@
     });
   ```
 
-* 局部mixin：`mixins:[mymixin]`
+* 局部mixins：`mixins:[mymixin]`
+>一般用于提取多个组件的公有部分配置
 
 ```js
   var mixin = {
@@ -49,6 +50,7 @@ new Vue({
 })
 
 ```
+
 
 ## 开发插件
 
@@ -77,12 +79,15 @@ new Vue({
       ...
     })
 
-    // 3. 注入组件
+    // 3. 注入组件（影响后面定义的所有组件）
     Vue.mixin({
       created: function () {
         // 逻辑...
       }
       ...
+    })
+    Vue.component('mycomponent',{
+      // 继承mixin中的created等配置
     })
 
     // 4. 添加实例方法

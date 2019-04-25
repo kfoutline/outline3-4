@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+    <title>案例_keep-alive实现状态保留</title>
+    <link rel="stylesheet" href="css/bootstrap.css">
+</head>
+
+<body>
+    <h1>案例_keep-alive实现状态保留</h1>
+    <div id="app">
+        <ul class="nav nav-tabs">
+            <li class="nav-item" v-for="tab in tabs">
+                <a class="nav-link" href="#" :class="{active:tab==currentTab}" @click="currentTab=tab">{{tab}}</a>
+            </li>
+        </ul>
+        <keep-alive :include="/-L/">
+            <component :is="currentComponent"></component>
+        </keep-alive>
+    </div>
+    <script src="lib/vue.js"></script>
+    <script>
+    /*
+          案例_keep-alive实现状态保留
+            * <kepp-alive/>
+            * <component/>
+         */
+
+    let vm = new Vue({
+        el: '#app',
+        data: {
+            currentTab: 'Laoxie',
+            tabs: ['Laoxie', 'Lemon', 'Tiantian']
+        },
+        computed: {
+            currentComponent(){
+                return 'tab-'+this.currentTab;
+            }
+        },
+
+        created() {
+            this.tabs.forEach(item => {
+                Vue.component('tab-' + item, {
+                    data(){
+                        return{
+                            num:1
+                        }
+                    },
+                    methods:{
+                        change(){
+                            this.num++;
+                        }
+                    },
+                    template: `<div class="p-3"><h4>${item}</h4><button @click="change">点击增加:{{num}}</button></div>`
+                });
+
+            });
+        }
+    });
+    </script>
+</body>
+
+</html>
