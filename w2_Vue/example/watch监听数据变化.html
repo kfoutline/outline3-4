@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>watch监听数据变化</title>
+    <script src="js/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        {{username}}
+        <p v-for="(val,key) of score">{{key}} : {{val}}</p>
+    </div>
+    <script>
+        let vm = new Vue({
+            el:'#app',
+            data:{
+                username:'laoxie',
+                score:{
+                    english:100,
+                    chinese:110,
+                    math:118
+                }
+            },
+            watch:{
+                username:(n,o)=>{
+                    console.log('username:',n,o)
+                },
+                'score.math':(val,old)=>{
+                    console.log('score.math:',val,old)
+                },
+                //对象模式
+                score:{
+                    handler(val,old){
+                        console.log('score:',val,old)
+                    },
+                    // 深度观察
+                    deep:true
+                }
+            }
+        })
+
+        vm.$watch('score.chinese',(val,old)=>{
+            console.log('score.chinese:',val,old)
+        })
+    </script>
+</body>
+</html>
