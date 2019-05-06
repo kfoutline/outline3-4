@@ -20,45 +20,63 @@
             <component :is="currentComponent"></component>
         </keep-alive>
     </div>
-    <script src="lib/vue.js"></script>
+    <script src="js/vue.js"></script>
     <script>
-    /*
-          案例_keep-alive实现状态保留
-            * <kepp-alive/>
-            * <component/>
-         */
+        /*
+              案例_keep-alive实现状态保留
+                * <kepp-alive/>
+                * <component/>
+             */
 
-    let vm = new Vue({
-        el: '#app',
-        data: {
-            currentTab: 'Laoxie',
-            tabs: ['Laoxie', 'Lemon', 'Tiantian']
-        },
-        computed: {
-            currentComponent(){
-                return 'tab-'+this.currentTab;
+        let vm = new Vue({
+            el: '#app',
+            data: {
+                currentTab: 'Laoxie',
+                tabs: ['Laoxie', 'Lemon', 'Tiantian']
+            },
+            computed: {
+                currentComponent() {
+                    return 'tab-' + this.currentTab;
+                }
+            },
+
+            created() {
+                console.log(this.$options)
+                this.tabs.forEach(item => {
+                    // this.$options.comonents不能重置
+                    this.$options.components['tab-' + item] = {
+                        data() {
+                            return {
+                                num: 1
+                            }
+                        },
+                        methods: {
+                            change() {
+                                this.num++;
+                            }
+                        },
+                        template: `<div class="p-3"><h4>${item}</h4><button @click="change">点击增加:{{num}}</button></div>`
+                    }
+
+                })
+                // this.tabs.forEach(item => {
+                //     Vue.component('tab-' + item, {
+                //         data(){
+                //             return{
+                //                 num:1
+                //             }
+                //         },
+                //         methods:{
+                //             change(){
+                //                 this.num++;
+                //             }
+                //         },
+                //         template: `<div class="p-3"><h4>${item}</h4><button @click="change">点击增加:{{num}}</button></div>`
+                //     });
+
+                // });
             }
-        },
-
-        created() {
-            this.tabs.forEach(item => {
-                Vue.component('tab-' + item, {
-                    data(){
-                        return{
-                            num:1
-                        }
-                    },
-                    methods:{
-                        change(){
-                            this.num++;
-                        }
-                    },
-                    template: `<div class="p-3"><h4>${item}</h4><button @click="change">点击增加:{{num}}</button></div>`
-                });
-
-            });
-        }
-    });
+        });
     </script>
 </body>
 
