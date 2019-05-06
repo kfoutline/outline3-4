@@ -11,6 +11,7 @@
     <div id="app">
         <div class="profile"></div>
         <div class="footer"></div>
+        <my-button></my-button>
     </div>
     <script>
         /**
@@ -21,6 +22,8 @@
                     * Vue.component(name,myVue);
                     * 在options中添加name属性（内部自动把name值用于定义一个组件）
         */
+
+        
         
         let Profile = Vue.extend({
             name:'laoxie',//if(name) Profile.options.components[name] = Profile
@@ -45,6 +48,28 @@
 
         let p2 = new Profile({
             el:'.footer'
+        });
+
+        
+
+        // 利用extend()扩展组件
+        Vue.mixin({
+            created(){
+                console.log('created:',this.username)
+            }
+        });
+        Vue.component('myButton',{
+            data(){
+                return {
+                    username:'laoxie'
+                }
+            },
+            template:`<button>按钮{{username}}</button>`
+        });
+        
+
+        new Vue({
+            el:'#app'
         })
     </script>
 </body>
