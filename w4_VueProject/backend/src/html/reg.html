@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>注册</title>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous" />
+    <script src="crypto-js.js"></script>
+    </head>
+
+<body>
+    <div class="container-fluid pt-5">
+        <h1 class="pb-2">注册</h1>
+        <div class="form-group">
+            <label for="username">用户名</label>
+            <input type="tel" class="form-control" id="username" placeholder="请输入11位手机号">
+            <small id="usernameHelp" class="invalid-feedback">手机号格式不正确</small>
+        </div>
+        <div class="form-group">
+            <label for="password">密码</label>
+            <input type="password" class="form-control" id="password" placeholder="Password">
+        </div>
+        <button type="submit" class="btn btn-success btnReg mr-2">免费注册</button> <a href="login.html">已有账户，直接登录</a>
+    </div>
+    <script>
+        (()=>{
+            // 避免全局环境污染
+            let btnReg = document.querySelector('.btnReg');
+            let username = document.querySelector('#username');
+            let password = document.querySelector('#password');
+
+            // CryptoJS加密
+            const key = 'laoxie1234567890';
+            const iv = 'laoxielaoxie6666'
+            function aesCrypto(data,key,iv){//加密
+                key  = CryptoJS.enc.Utf8.parse(key);
+                iv   = CryptoJS.enc.Utf8.parse(iv);
+                var encrypted =CryptoJS.AES.encrypt(data,key,{
+                    iv,
+                    // mode:CryptoJS.mode.CBC,
+                    // padding:CryptoJS.pad.Pkcs7
+                });
+                return encrypted.toString();    //返回的是base64格式的密文（后端要与之匹配）
+            }
+
+            // 注册
+            let xhr = new XMLHttpRequest();
+            xhr.onload = ()=>{
+                let res = JSON.parse(xhr.responseText);
+                if(res.status == 200){
+                    console.log(res)
+                    // alert('注册成功，跳转到登陆页');
+                    // location.href = 'login.html';
+                }
+            }
+
+            // 验证用户名是否存在
+            let xhr_check = new XMLHttpRequest();
+            xhr_check.onload = ()=>{
+                let res = JSON.parse(xhr_check.responseText);
+                if(res.status == 300){
+                    // 用户名已存在
+                    username.classList.add('is-invalid')
+                    username.nextElementSibling.innerText = username.value + '用户名已被注册';
+                }else{
+                    username.classList.remove('is-invalid');
+                    username.classList.add('is-valid');
+                }
+            }
+
+            btnReg.onclick = ()=>{
+                let _username = username.value.trim();
+                let _password = password.value.trim();
+
+                // 前端验证
+                if(!_username || !_password){
+                    alert('用户名和密码不能为空')
+                    return false;
+                }
+
+                // 格式验证（手机号）
+                // if(!/^1[3-9]\d{9}$/.test(_username)){
+                //     username.classList.add('is-invalid');
+                //     hone.nextElementSibling.innerText = '请输入正确的手机号';
+                //     return false;
+                // }
+
+                username.classList.remove('is-invalid');
+                username.classList.add('is-valid');
+
+                // 加密后发送到后端
+                // _username = aesCrypto(_username,key,iv);
+                _password = aesCrypto(_password,key,iv);
+                
+                xhr.open('post','/reg',true);
+                xhr.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
+                xhr.send(`username=${_username}&password=${_password}`);
+            }
+
+            // 用户名验证
+            username.onchange = ()=>{
+                let _username = username.value.trim();
+                xhr_check.open('get',`/reg/check?username=${_username}`,true);
+                xhr_check.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
+                xhr_check.send();
+            }
+        })();
+    </script>
+</body>
+
+</html>
