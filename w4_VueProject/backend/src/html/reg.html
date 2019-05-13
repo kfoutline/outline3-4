@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css"
         integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous" />
     <script src="crypto-js.js"></script>
+    <script src="../../node_modules/jsencrypt/bin/jsencrypt.js"></script>
     </head>
 
 <body>
@@ -33,8 +34,20 @@
             let password = document.querySelector('#password');
 
             // CryptoJS加密
+            const publicKey = `-----BEGIN PUBLIC KEY-----
+            AAAAB3NzaC1yc2EAAAADAQABAAABAQC1SfeGCCejarhKzo0RTF+3wGAYJchppH0tLZvNct3YfiFVXBPwXzOWGu/zcmpF6/OWBqy7GMNVQQW5Jct18tQ84HHjHV19FQWQu12WeJRPKsI0E8tOuZGG96C0VjclSVHvKHg5iH/fyxfMQpwmSNimUqCXIpDteKZlG9M62cDeeLG7U1UOzQAa06cwgdisK8YSOPTpgUZW+zLnmJIxrT8+UXd/mDem1HN1LSQoh65GAoghE+P7z0ZTWK0YBvhMg6LcOQAnKSqgllZ8Mzl4yN57U6SAsS1gowLCsXfAvs1eiPPnLc75ENykMWMIkpB/UCzUu2jzJdh0K5lNBsOuQHlZ
+            -----END PUBLIC KEY-----`
             const key = 'laoxie1234567890';
-            const iv = 'laoxielaoxie6666'
+            const iv = 'laoxielaoxie6666';
+
+            function rsaCrypto(data){
+                let encrypt = new JSEncrypt();
+                encrypt.setPublicKey(publicKey);
+                return encrypt.encrypt(data);
+
+            }
+
+
             function aesCrypto(data,key,iv){//加密
                 key  = CryptoJS.enc.Utf8.parse(key);
                 iv   = CryptoJS.enc.Utf8.parse(iv);
@@ -93,7 +106,8 @@
 
                 // 加密后发送到后端
                 // _username = aesCrypto(_username,key,iv);
-                _password = aesCrypto(_password,key,iv);
+                // _password = aesCrypto(_password,key,iv);
+                _password = rsaCrypto(_password);console.log(_password)
                 
                 xhr.open('post','/reg',true);
                 xhr.setRequestHeader('Content-Type','application/x-www-form-urlencoded');

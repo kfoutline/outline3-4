@@ -1,5 +1,16 @@
 # Vue扩展
 
+## 优化
+* 性能优化
+  * 代码质量
+  * 按需加载
+* 用户体验优化
+  * 界面友好性
+  * 操作便捷性
+  * 细节完善性
+* 搜索引擎优化SEO
+  * 语义化标签
+
 ## mixin混入
 
 > 混入 (mixins) 一般用于组件选项的复用（所有属性与组件选项一致）。并以一定的合并规则混入到组件中
@@ -10,16 +21,18 @@
   ```js
     Vue.mixin({
       created: function () {
-        // created生命周期函数会混入到下面的Vue实例中，故能获取到myOption属性
-        var myOption = this.$options.myOption
-        if (myOption) {
-          console.log(myOption)
-        }
+        // created生命周期函数会混入到下面的Vue实例中,且不会影响原来的选项
+        console.log('global mixin:',this.username)
       }
     });
 
     new Vue({
-      myOption: 'hello!'
+      data:{
+        username:'laoxie'
+      },
+      created(){
+        console.log('app.username',this.username)
+      }
     });
   ```
 
