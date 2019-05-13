@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Mixin</title>
+    <script src="js/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <my-head></my-head>
+        <my-button></my-button>
+    </div>
+    <script>
+        /**
+            Mixin
+                * 全局mixin
+                * 局部mixins
+        */
+
+        Vue.mixin({
+            created(){
+                console.log('global mixin -> created:',this.name)
+            }
+        });
+        Vue.component('myButton',{
+            data(){
+                return {
+                    name:'myButton'
+                }
+            },
+            template:`<button>按钮{{name}}</button>`
+        });
+        
+        let myMixin = {
+            created(){
+                console.log('local mixin -> myMixin:',this.name)
+            }
+        }
+        let yourMixin = {
+            data(){
+                return {
+                    age:18
+                }
+            },
+            created(){
+                console.log('local mixin -> yourMixin:',this.name)
+            }
+        }
+
+        let vm = new Vue({
+            el:'#app',
+            data:{
+                name:'app'
+            },
+            myOption:'hello',
+            components:{
+                myHead:{
+                    data(){
+                        return {
+                            name:'myHead'
+                        }
+                    },
+                    mixins:[myMixin,yourMixin],
+                    template:`<div>{{name}}</div>`,
+                    created(){
+                        console.log('myHead created：',this.name);
+                        console.log(this,this.age)
+                    }
+                }
+            }
+        })
+    </script>
+</body>
+</html>
