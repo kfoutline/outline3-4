@@ -4,7 +4,7 @@ const rootRouter = require('./router');
 
 const app = express();
 
-app.use(express.static('./'));
+app.use(express.static('./'),{maxAge:3600000});
 
 app.use(rootRouter);
 
