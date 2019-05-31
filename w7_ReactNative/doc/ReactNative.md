@@ -1,6 +1,7 @@
 # React Native
 
 ## 介绍
+React Native (简称RN)是Facebook于2015年4月开源的跨平台移动应用开发框架，是React 在原生移动应用平台的衍生产物，使用JS、JSX、CSS开发原生应用，目前支持iOS和安卓两大平台
 
 ## 环境安装
 以windows+Android平台来安装React Native环境
