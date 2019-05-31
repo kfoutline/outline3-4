@@ -55,5 +55,7 @@ React Native (简称RN)是Facebook于2015年4月开源的跨平台移动应用�
 ## 使用
 
 ### 内置组件
+> 详情请查看官网 https://facebook.github.io/react-native/
 
 ### API
+> 详情请查看官网 https://facebook.github.io/react-native/
