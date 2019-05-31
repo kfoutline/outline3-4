@@ -57,18 +57,18 @@ Node.js 的包管理器 npm，是全球最大的开源库生态系统，随着no
 
 ### 模块化开发
 
-为了让Nodejs的文件可以相互调用，Nodejs提供了一个简单的模块系统，一个文件即一个模块，采用同步的commonJS规范
+一个模块有自己独立的作用域，为了让Nodejs的文件可以相互调用，Nodejs提供了一个简单的模块系统，一个文件即一个模块，采用同步的commonJS规范
 
 #### 模块分类
 
 >模块系统是 Nodejs 最基本也是最常用的。一般情况模块可分为四类：
 
+* 自定义模块
 * 原生模块（Nodejs内置模块）
 * 文件模块（json文件等）
 * 第三方模块
-* 自定义模块
 
-#### 创建自定义模块
+#### 定义模块
 
 ```javascript
 //hello.js
@@ -77,7 +77,7 @@ function hello(){
     return 'hello laoxie';
 }
 
-//对外暴露接口
+//对外暴露接口（commonJS规范）
 module.exports = hello;
 ```
 

@@ -15,7 +15,7 @@
 </head>
 <body>
     <div id="app">
-        <my-header v-slot:default="{username,password}">
+        <my-header v-slot:default="{username,password}" username="laoxie">
             <!-- backProps:{idx:10,icon:'xxx.png'} -->
             <template v-slot:icon-back="backProps">back{{backProps}}</template>
             <template v-slot:icon-setting="settingProps">设置</template>
@@ -49,7 +49,7 @@
        }
 
        const icon = {
-           template:'<div class="myicon">myicon<slot/></div>'
+           template:'<div class="myicon"><slot/></div>'
        }
 
         let vm = new Vue({
