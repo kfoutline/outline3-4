@@ -1,116 +1,75 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWepackPlugin = require('clean-webpack-plugin');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
 
-// 导出配置模块
+// 导出webpack配置
 module.exports = {
-	entry:{
-		main:'./src/app.js',
-		comment:'./src/comment.js',
-		todolist:'./src/todolist.js',
-		test:'./src/test.js',
-		router:'./src/router.js',
-		redux:'./src/redux.js'
-	},
-	output:{
-		path:path.resolve(__dirname,'./dist'),
-		filename:'js/[name]-bundle.js'
-	},
-	mode:'development',
-	devServer: {
-      contentBase: path.join(__dirname, "./dist"), //网站的根目录为 根目录/dist，如果配置不对，会报Cannot GET /错误
-      port: 9000, //端口改为9000
-      open:true, // 自动打开浏览器，适合懒人
-      proxy:{
-      	'/api':{
-      		target:'http://localhost:10086',
-      		changeOrigin:true
-      	}
-      },
-    //   host:'0.0.0.0',//localhost,ip,127.0.0.1都生效
+    // 入口
+    entry:{
+        main:'./src/main.js'
     },
-	module:{
+
+    // 出口
+    output:{
+		path:path.resolve(__dirname,'./dist'),
+		filename:'js/[name]-[hash:5].js'
+    },
+
+    // 服务器
+    devServer: {
+        contentBase: path.join(__dirname, "./src"), 
+        // port: 1901, // 默认8080
+        proxy:{
+            '/api':{
+                target:'http://localhost:10086',
+                changeOrigin:true
+            }
+        },
+        // host:'0.0.0.0',//localhost,ip,127.0.0.1都生效
+    },
+    
+    // 加载器
+    module:{
 		rules:[
-			{ 
+            {
+				test:/\.js|jsx$/,
+				exclude:path.resolve(__dirname,'./node_modules'),//排除node_modules目录
+				
+				use:[{
+                    loader:'babel-loader',
+                    options:{
+                        presets:['@babel/react'],
+                        plugins: [
+                            '@babel/plugin-proposal-class-properties'
+                            // ["import", { libraryName: "antd-mobile", style: "css" }] // `style: true` 会加载 less 文件
+                        ]
+                    }
+				}]
+            },
+            { 
 				test: /\.css$/, 
 				loader: ['style-loader','css-loader'] 
-			},
-			{
-				test:/\.js$/,
-				exclude:path.resolve(__dirname,'./node_modules'),
-				
-				use:[
-					{
-						loader:'babel-loader',
-						options:{
-							presets:['env','react','stage-0'],
-							plugins: [
-							    ["import", { libraryName: "antd-mobile", style: "css" }] // `style: true` 会加载 less 文件
-							  ]
-						}
-					}
-				]
-			},
+            },
 			{
 				test:/\.scss$/,
 				loader:['style-loader','css-loader','sass-loader']
 			}
-		]
-	},
-	plugins:[
+        ]
+    },
+
+    // 插件
+    plugins:[
 		new HtmlWebpackPlugin({
-			template:'./src/index.html',
+			template:'./src/template.html',
 			hash:true,
-			title:'首页',
-			chunks: ['main']
-		}),
-
-		new HtmlWebpackPlugin({
-			template:'./src/index.html',
-			hash:true,
-			filename:'comment.html',
-			title:'评论',
-			chunks: ['comment']
-		}),
-
-		new HtmlWebpackPlugin({
-			template:'./src/index.html',
-			hash:true,
-			filename:'test.html',
-			title:'测试代码',
-			chunks: ['test']
-		}),
-
-		new HtmlWebpackPlugin({
-			template:'./src/index.html',
-			hash:true,
-			filename:'todolist.html',
-			title:'Todo List',
-			chunks: ['todolist']
-		}),
-
-		new HtmlWebpackPlugin({
-			template:'./src/index.html',
-			hash:true,
-			filename:'router.html',
-			title:'路由测试',
-			chunks: ['router']
-		}),
-
-		new HtmlWebpackPlugin({
-			template:'./src/index.html',
-			hash:true,
-			filename:'redux.html',
-			title:'redux',
-			chunks: ['redux']
-		}),
-
-		new CleanWepackPlugin(['dist']),
-
-		// new CopyWebpackPlugin([{
-		// 	from:'./src/img',
-		// 	to:'img'
-		// }])
-	]
+			title:'首页'
+        }),
+        // new HtmlWebpackPlugin({
+		// 	template:'./src/template.html',
+		// 	hash:true,
+        //     title:'购物车',
+        //     filename:'cart.html' //默认index.html
+        // }),
+        new CleanWepackPlugin()
+    ]
 }
