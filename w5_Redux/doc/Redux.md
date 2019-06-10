@@ -222,6 +222,7 @@ redux中的action仅支持原始对象（plain object），处理有副作用的
 * redux-chunk
 * redux-promise
 * redux-saga
+
 ```js
     import {createStore,applyMiddleware} from 'redux';
     import createSagaMiddleware from 'redux-saga';
