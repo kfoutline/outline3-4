@@ -7,7 +7,7 @@ React Native (简称RN)是Facebook于2015年4月开源的跨平台移动应用�
 以windows+Android平台来安装React Native环境
 
 * Nodejs
-> Node 的版本必须大于等于 10
+> Node 的版本必须大于等于 v10.x
 
 * React Native命令行工具
 > 全局安装react-native-cli
@@ -45,4 +45,6 @@ React Native (简称RN)是Facebook于2015年4月开源的跨平台移动应用�
 
 ```bash
     react-native run-android
+
+    react-native run-ios
 ```
