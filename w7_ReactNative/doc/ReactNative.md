@@ -27,13 +27,14 @@ React Native (简称RN)是Facebook于2015年4月开源的跨平台移动应用�
             * -> Intel x86 Atom_64 System Image
         * SDK Manager -> "SDK Tools"
             * -> 28.0.3（React Native 所必须的版本）
-    * 配置 ANDROID_HOME 环境变量
-        > c:\Users\你的用户名\AppData\Local\Android\Sdk
-        > 设置%ANDROID_HOME%到path
+    * 配置环境变量
+        > 设置`ANDROID_HOME`**系统变量**到`c:\Users\你的用户名\AppData\Local\Android\Sdk`
+        
+        > 设置`%ANDROID_HOME%\platform-tools`到path
 
 > PS：安装以上工具尽量使用稳定的翻墙工具，否则在下载、安装、配置过程中会不断遭遇链接超时或断开，导致无法安装的情况
 
-## 使用
+## 开始一个项目
 
 1. 创建新项目
 ```bash
@@ -44,7 +45,17 @@ React Native (简称RN)是Facebook于2015年4月开源的跨平台移动应用�
 > 注意第一次运行时需要下载大量编译依赖，耗时可能数十分钟
 
 ```bash
+    # android
     react-native run-android
 
+    # iOS
     react-native run-ios
 ```
+
+## 使用
+
+### 内置组件
+> 详情请查看官网 https://facebook.github.io/react-native/
+
+### API
+> 详情请查看官网 https://facebook.github.io/react-native/
