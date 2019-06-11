@@ -34,6 +34,9 @@ TypeScript由微软开发的自由和开源的编程语言，设计目标是开�
 ```
 * 元组Tuple
 > 元组类型允许表示一个已知元素数量和类型的数组，各元素的类型不必相同
+```ts
+    let arr:[number,number,string] = [10,20,'h5']
+```
 
 * 泛型编程
 > 可以适用于多个类型，格式：`Array<元素类型>`
@@ -43,6 +46,12 @@ TypeScript由微软开发的自由和开源的编程语言，设计目标是开�
         return arg;
     }
     let output = identity<string>("myString");
+```
+* 枚举enum
+```ts
+    enum Color {Red, Green, Blue}
+    let c: Color = Color.Green;// 1
+    let str:string = Color[2];// 'Blue'
 ```
 
 * 接口
@@ -60,15 +69,16 @@ TypeScript由微软开发的自由和开源的编程语言，设计目标是开�
 
     document.body.innerHTML = greeter(user)
 ```
-* 枚举enum
-```ts
-    enum Color {Red, Green, Blue}
-    let c: Color = Color.Green;// 1
-    let str:string = Color[2];// 'Blue'
-```
 
 * 命名空间
-
+> 可以利用同一个命名空间把代码分散到不同的文件
+```ts
+    namespace Validation {
+        export interface StringValidator {
+            isAcceptable(s: string): boolean;
+        }
+    }
+```
 
 * 类
 ```ts
@@ -103,6 +113,7 @@ TypeScript由微软开发的自由和开源的编程语言，设计目标是开�
 
 ### 配置文件
 * tsconfig.json
+> 通过 `tsc --init` 生成
 ```json
 {
     "compilerOptions": {

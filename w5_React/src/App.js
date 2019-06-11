@@ -4,6 +4,8 @@ import Home from './pages/Home.jsx';
 
 import TodoList from './pages/TodoList';
 
+// import Cart from './pages/Cart.tsx';
+
 function App(){
     return <div>
         App,
@@ -14,6 +16,7 @@ function App(){
             </div>
             <p>666</p>
         </Home>
+        <Cart/>
         <TodoList/>
     </div>
 }

@@ -32,7 +32,7 @@ module.exports = {
     module:{
 		rules:[
             {
-				test:/\.js|jsx$/,
+				test:/\.jsx?$/,
 				exclude:path.resolve(__dirname,'./node_modules'),//排除node_modules目录
 				
 				use:[{
@@ -45,6 +45,10 @@ module.exports = {
                         ]
                     }
 				}]
+            },
+            { 
+				test: /\.tsx?$/, 
+				loader: ['ts-loader'] 
             },
             { 
 				test: /\.css$/, 
