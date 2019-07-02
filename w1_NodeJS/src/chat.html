@@ -53,6 +53,11 @@
 
 			login.onclick = e=>{
 				if(e.target.className === 'btn-login'){
+					if(username.value == ''){
+						status.style.display = 'block';
+						status.innerText = '请输入昵称';
+						return 
+					}
 					// 连接socket服务器
 					socket = new WebSocket(`ws://${location.host}`);
 

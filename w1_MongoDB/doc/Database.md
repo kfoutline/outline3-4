@@ -322,8 +322,8 @@ MongoDB是一个基于分布式文件存储的数据库，由C++语言编写，�
     db.createCollection('site', function (err, res) {
         if (err) throw err;
         console.log("创建集合!");
-        db.clo
-    });se();
+        db.close();
+    });
 ```
 
 #### 文档操作

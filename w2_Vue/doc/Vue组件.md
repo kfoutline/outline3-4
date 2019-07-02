@@ -330,9 +330,9 @@
 
   <!-- Vue2.6+用法 -->
   <my-component>
-    <span v-slot:header>这里的内容显示到name为header的插槽</span>
+    <template v-slot:header>这里的内容显示到name为header的插槽</template>
     <span>这里的内容显示到默认插槽</span>
-    <span v-slot:footer>这里的内容显示到name为footer的插槽</span>
+    <template v-slot:footer>这里的内容显示到name为footer的插槽</template>
   </my-component>
 ```
 
