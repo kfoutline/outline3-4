@@ -1,9 +1,11 @@
 <template>
     <div>
         <h1>{{username}}</h1>
+        <Swiper/>
     </div>
 </template>
 <script>
+import Swiper from './components/Swiper.vue';
 export default {
     data(){
         return {
@@ -12,9 +14,10 @@ export default {
     },
 
     async created(){
-        let res = await axios.post('xxx')
-
-        this.username = res.data.username
+        
+    },
+    components:{
+        Swiper
     }
 }
 </script>
