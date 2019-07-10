@@ -15,7 +15,7 @@ Router.post('/',async (req,res)=>{
     // 对密码进行加密
     let password = req.body.password;
     
-    // 指定的算法与密码来创建cipher对象
+    // 指定的算法与密钥来创建cipher对象
     const cipher = crypto.createCipher('aes192', key);
     // 使用该对象的update方法来指定需要被加密的数据
     let crypted = cipher.update(password, 'utf-8', 'hex');

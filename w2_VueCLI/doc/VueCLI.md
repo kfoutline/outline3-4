@@ -45,3 +45,7 @@
 ```
 
 ## jvue.config.js配置
+* publicPath
+* outputDir
+* assetsDir
+* runtimeCompiler

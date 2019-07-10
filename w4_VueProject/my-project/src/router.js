@@ -11,7 +11,10 @@ export default new Router({
     {
       path: '/',
       name: 'home',
-      component: Home
+      components: {
+        Home,
+        Te:{template:'<div>test</div>'}
+      }
     },
     {
       path: '/about',
