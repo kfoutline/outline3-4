@@ -61,15 +61,15 @@
                     return false;
                 }
 
-                let crypted = CryptoJS.AES.encrypt(_password,'laoxie')
-                console.log(crypted.toString())
+                let crypted = CryptoJS.AES.encrypt(_password,'laoxie').toString()
+                console.log(crypted)
 
 
 
 
-                // xhr.open('post', '/login', true);
-                // xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-                // xhr.send(`username=${_username}&password=${_password}`);
+                xhr.open('post', '/login', true);
+                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                xhr.send(`username=${_username}&password=${crypted}`);
             }
 
 

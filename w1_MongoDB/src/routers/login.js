@@ -19,12 +19,14 @@ Router.post('/',async (req,res)=>{
     let {username,password} = req.body;console.log(username,password)
 
     // 使用该对象的update方法来指定需要被加密的数据
-    // let decrypted = decipher.update(password, 'hex', 'utf-8');
-
-    // decrypted += decipher.final('utf-8');
-    const cipher = crypto.createCipher('aes192', key);
-    let crypted = cipher.update(password, 'utf-8', 'hex');
-    crypted = cipher.final('hex');
+    const decipher = crypto.createDecipher('aes192',key)
+    let decrypted = decipher.update(password, 'hex', 'utf-8');
+    decrypted += decipher.final('utf-8');
+    console.log('解密：',decrypted);
+    return res.send(decrypted);
+    // const cipher = crypto.createCipher('aes192', key);
+    // let crypted = cipher.update(password, 'utf-8', 'hex');
+    // crypted = cipher.final('hex');
 
 
     let result;

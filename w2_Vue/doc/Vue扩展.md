@@ -1,27 +1,77 @@
 # Vue扩展
 
-## 优化
-* 性能优化
-  * 代码质量
-    * Eslint
-  * 按需加载
-  * http请求优化
-    * 合并压缩
-  * 图片优化
-    * 大小
-    * 缓存：针对静态资源（图片、css,js）
-      * 更新问题件如何避免缓存：添加时间戳 xxx.js?t=11234366345
-  * ...
-* UEO（用户使用产品过程中的主观感受）
-  * 界面友好性
-  * 操作便捷性
-  * ...
-* SEO（让页面对搜索引擎更友好）
-  * 语义化标签
-  * 热搜(原创)
-  * 友情链接
-  * ...
-* 安全性优化
+## 自定义指令
+
+>内置指令
+
+* 全局指令
+    * 格式：Vue.directive(name,option)
+    * 参数
+        * name：指令名字，使用格式：v-name
+        * option
+            * Object：放钩子函数
+            * Function：默认为bind和update的钩子函数
+* 局部指令
+    格式：directives: {}
+* 钩子函数（了解）
+    * bind：初始化时执行（默认）
+    * inserted：元素插入页面时执行
+    * update：所在模板更新时执行
+    * componentUpdated：所在模板完成一次更新周期时调用
+    * unbind：指令与元素解绑时执行
+    * 参数
+        * el    指令所绑定的元素，可以用来直接操作 DOM
+        * binding   一个对象，包含以下案例中的属性
+        * vnode
+        * oldVnode
+            > 仅在update 和 componentUpdated 钩子中可用
+
+```javascript
+   // 使用指令：v-laoxie
+    Vue.directive('laoxie', {
+      bind: function (el, binding, vnode) {
+
+        //binding参数如下
+        el.innerHTML =
+          'name: '       + JSON.stringify(binding.name) + '<br>' + //指令名
+          'value: '      + JSON.stringify(binding.value) + '<br>' + //指令值
+          'expression: ' + JSON.stringify(binding.expression) + '<br>' + //字符串形式的指令表达式
+          'arg: '        + JSON.stringify(binding.arg) + '<br>' + //指令参数，
+          'modifiers: '  + JSON.stringify(binding.modifiers) + '<br>' //指令修饰符
+      }
+    });
+```
+
+
+## 过滤器
+
+Vue允许你自定义过滤器，可被用于一些常见的文本格式化。
+过滤器可以用在两个地方：双花括号插值和 v-bind
+
+```html
+    <!-- 在双花括号中 -->
+    {{ message | capitalize }}
+
+    <!-- 在 `v-bind` 中 -->
+    <div v-bind:id="rawId | formatId"></div>
+```
+
+### 全局过滤器
+
+> 格式：Vue.filter(name,definition)
+
+### 局部过滤器
+
+> 格式:filters属性
+
+```javascript
+    // 首字母大写
+    Vue.filter('capitalize', function (value) {
+      if (!value) return ''
+      value = value.toString()
+      return value.charAt(0).toUpperCase() + value.slice(1)
+    })
+```
 
 
 
