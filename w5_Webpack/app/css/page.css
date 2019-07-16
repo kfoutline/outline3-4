@@ -1,0 +1,6 @@
+.container{width:200px;margin:0 auto;}
+.left{float:left;width:100px;}
+.right{float:right;width:190px;}
+h1{color:#f00;}
+
+.box h2{color:#58bc58;border-bottom: 2px solid #ddd;}

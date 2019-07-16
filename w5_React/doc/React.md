@@ -6,8 +6,9 @@ React是一个视图层的框架，起源于 Facebook 的内部项目，因为�
 React官网地址：http://facebook.github.io/react/
 
 ### React 特点
+
 * 声明式设计
->React采用声明范式，可以轻松描述应用。
+>React采用声明式，可以轻松描述应用。
 * 高性能
 >React通过对DOM的模拟(Virtual DOM)，最大限度地减少与DOM的交互。
 * 组件化开发
@@ -72,6 +73,16 @@ React官网地址：http://facebook.github.io/react/
     }
 ```
 
+### UI渲染
+
+* ReactDOM.render(template,targetDOM)
+    >是React的最基本方法，用于将模板转为HTML语言，并插入指定的DOM节点
+
+    - template：可以是HTML标签或 React 组件，React利用大小写来区分标签与组件
+        - 要渲染 HTML 标签，只需在 JSX 里使用小写字母的标签名。
+        - 要渲染 React 组件，只需创建一个大写字母开头的本地变量
+    - targetDOM：挂载点，必须为元素节点
+
 ### JSX语法
 一种特殊的js语法，是ECMAScript的扩展，可以让我们在js代码中直接使用html标签，再通过编译器（Babel）转成标准的 JavaScript 后由浏览器执行。
 
@@ -88,6 +99,7 @@ Babel解析规则：
     * for -> htmlFor
     * tabindex -> tabIndex
     * autofocus -> autoFocus
+    * ......
 * 必须结束标签（如：`<input type="text"/>`）
 * style 属性的值接收一个对象，css 的属性必须为驼峰写法
 >style={{"backgroundColor":"#f60"}}
@@ -95,16 +107,6 @@ Babel解析规则：
 * 使用js语法注释（如{`/*注释内容*/`}，`//注释内容`）
 
 >PS: JSX不是必须的，它只是`React.createElement(type,[props],[...children])`的语法糖，在我们应用JSX进行开发的时候，其实它最终会转化成React.createElement…去创建元素。
-
-### UI渲染
-
-* ReactDOM.render(template,targetDOM)
-    >是React的最基本方法，用于将模板转为HTML语言，并插入指定的DOM节点
-
-    - template：可以是HTML标签或 React 组件，React利用大小写来区分标签与组件
-        - 要渲染 HTML 标签，只需在 JSX 里使用小写字母的标签名。
-        - 要渲染 React 组件，只需创建一个大写字母开头的本地变量
-    - targetDOM：挂载点，必须为元素节点
 
 
 
