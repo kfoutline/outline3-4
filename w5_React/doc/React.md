@@ -285,10 +285,34 @@ Babel解析规则：
 >所谓context，就是**上下文环境**，某个组件只要往自己的 context 里面放了某些状态，这个组件之下的所有子组件都直接访问这个状态(context好比组件的全局变量，能让所有子组件直接访问)
 
 * 实现步骤
-    1. 定义数据：父组件设置getChildContext方法并返回context对象
-    2. 验证数据类型：父组件设置childContextTypes静态属性声明和验证context对象的属性
-    3. 验证数据类型：子组件设置contextTypes静态属性声明和验证context
-    4. 使用数据：子组件通过this.context.xxx获取需要的共享数据
+    1. 父组件Provider
+    2. 子组件
+        * contextType
+        * Consumer
+
+    ```js
+        // 定义与默认值
+        const MyContext = React.createContext('light');
+        // 父组件
+        <MyContext.Provider value="dark">
+            <Toolbar />
+        </MyContext.Provider>
+
+        // 子组件
+        // 1.contextType
+        SubComponent.contextType = MyContext;
+        render() {
+            return <Button theme={this.context} />;
+        }
+
+        // 2,consumer
+        
+
+        //子组件
+        <MyContext.Consumer>
+        {value => /* 基于 context 值进行渲染*/}
+        </MyContext.Consumer>
+    ```
 
 ### 高阶组件HOC（High Order Component）
 
