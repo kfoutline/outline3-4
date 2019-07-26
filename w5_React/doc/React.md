@@ -293,30 +293,30 @@ Babel解析规则：
     ```js
         // 定义与默认值
         const MyContext = React.createContext('light');
-        // 父组件
+        // 父组件：提供value
         <MyContext.Provider value="dark">
             <Toolbar />
         </MyContext.Provider>
 
         // 子组件
-        // 1.contextType
+        // 1. 通过class.contextType获取
         SubComponent.contextType = MyContext;
+        //或static contextType = MyContext;//需安装@babel/plugin-proposal-class-properties插件
         render() {
             return <Button theme={this.context} />;
         }
 
-        // 2,consumer
-        
-
+        // 2. 通过<MyContext.Consumer/>获取
         //子组件
         <MyContext.Consumer>
-        {value => /* 基于 context 值进行渲染*/}
+        {value =>{/* 基于 context 值进行渲染*/} }
         </MyContext.Consumer>
     ```
 
+
 ### 高阶组件HOC（High Order Component）
 
-* 高阶组件是一个函数，且该函数接受一个组件作为参数，并返回一个新组件
+* 高阶组件是参数为组件，返回值为新组件的函数
 * 高阶组件是一种设计模式，类似于装饰器模式
 
 #### 使用场景
@@ -376,6 +376,7 @@ Babel解析规则：
 
     export default Home
 ```
+>PS：需安装@babel/plugin-proposal-decorators插件
 
 
 ## 事件处理
