@@ -24,6 +24,32 @@
 
 
 ### 命令
-* npm start
-* npm run eject
-单向操作不可逆，npm eun eject命令暴露项目的配置，可以自由配置项目所需的依赖，不使用的版本零配置即可开发
+* 启动项目
+```bash
+    npm start
+```
+* 扩展webpack配置
+    * `npm run eject`
+        >单向操作不可逆，npm run eject命令暴露项目的配置，这样用户就可以完全取得 webpack 文件的控制权
+    * `react-app-rewired`
+        >通过创建一个config-overrides.js文件来对 webpack 配置进行扩展。
+        1. 配置config-overrides.js
+        ```js
+            module.exports = function override(config, env) {
+                // 修改配置
+                config.resolve.alias['@'] = path.join(__dirname,'./src/')
+                return config;
+            }
+        ```
+        2. 修改package.json中的npm script
+        ```json
+            "scripts": {
+                -   "start": "react-scripts start",
+                +   "start": "react-app-rewired start",
+                -   "build": "react-scripts build",
+                +   "build": "react-app-rewired build",
+                -   "test": "react-scripts test --env=jsdom",
+                +   "test": "react-app-rewired test --env=jsdom",
+                    "eject": "react-scripts eject"
+            }
+        ```

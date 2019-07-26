@@ -1,0 +1,11 @@
+html,body{height:100%}
+
+#root,.myapp{@extend body;}
+.myapp{display:flex;flex-direction: column;}
+.myapp>.content{flex:1;overflow-y:auto;}
+.myapp>.am-tab-bar{height:50px;}
+
+.price span{color:#f00}
+.price span::before{content:'￥';}
+
+.Discover{height:100%;}
