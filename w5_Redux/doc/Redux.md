@@ -20,6 +20,13 @@ Redux ，也可以使用 Redux 而不使用 React
 * 在一个组件中需要改变全局状态
 * 在一个组件中需要改变另一个组件的状态
 
+### Redux设计和使用的三项基本原则
+1. store是必须是唯一的
+2. 只有store能改变自己的内容 
+>reducer 可以接受state，但是绝对不能修改state
+3. Reducer必须是一个纯函数 
+>纯函数指的是，给固定的输入，就一定会有固定的输出，而且不会有任何副作用
+
 ### Redux 的工作流程
 
 ![Alt text](./img/redux.jpg "Optional title")
@@ -133,6 +140,7 @@ Reducer 必须是一个**纯函数**，用于指定state修改逻辑，它接受
 
 
 
+
 ## React-Redux
 
 ![Alt text](./img/react-redux.jpg "Optional title")
@@ -228,6 +236,7 @@ redux中的action仅支持原始对象（plain object），处理有副作用的
         * Iterator
     * Effect
         * call
+        * apply
         * put
         * takeAvery
         * takeLatest
