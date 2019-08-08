@@ -1,5 +1,5 @@
-import  { ADD_TO_CART,UPDATE_CART,DELETE_FROM_CART }  from '../actions/cart-actions';
-import {Map,List} from 'immutable';
+import  { ADD_TO_CART,CHANGE_QTY,DELETE_FROM_CART }  from '../actions/cart-actions';
+import {isImmutable,Map,List,fromJS} from 'immutable';
 const initialState = Map({
   cart: List([
     Map({
@@ -19,17 +19,25 @@ const initialState = Map({
 
 
 export default function(state=initialState, action) {
+  let idx;
+  // 判断state是否为immutable
+  if(!isImmutable(state)){
+    state = fromJS(state)
+  }
+
+  
   switch (action.type) {
-    case ADD_TO_CART:console.log(111)
+    case ADD_TO_CART:
       // return {
       //   ...state,
       //   cart: [...state.cart, action.payload]// Immutable.set()
       // }
-      let cart = state.get('cart').unshift(action.payload);
-      state.update('cart',cart);
+      // let cart = state.get('cart').unshift(action.payload);
+      let cart = state.get('cart').insert(0,Map(action.payload))
+      state = state.update('cart',()=>cart);console.log('state:',cart.get(0))
       return state.toJS();
 
-    case UPDATE_CART:
+    case CHANGE_QTY:
       // return{
       //   ...state,
       //   cart:state.cart.map(item=>{
@@ -37,17 +45,19 @@ export default function(state=initialState, action) {
       //     return item.proId===action.payload.proId ? Object.assign(item,action.payload) : item;
       //   })
       // }
-      // state.get('cart').filter(item=>item)
-      return state.updataIn(['cart'])
+      idx = state.get('cart').findIndex(item=>item.id===action.payload.id)
+      return state.updateIn(['cart',idx,'qty'],action.payload.qty)
 
 
       case DELETE_FROM_CART:
-        return {
-          ...state,
-          cart:state.cart.filter(item=>{
-            return item.proId !== action.payload.proId
-          })
-        }
+        // return {
+        //   ...state,
+        //   cart:state.cart.filter(item=>{
+        //     return item.proId !== action.payload.proId
+        //   })
+        // }
+        idx = state.get('cart').findIndex((item)=>item.id===action.payload)
+        return state.deleteIn(['cart',idx])
 
     default:
       return state.toJS();

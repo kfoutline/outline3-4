@@ -78,6 +78,8 @@ var imC = imA.merge(imB);
 
 * `insert(index,item)`
 
+* 深拷贝与浅拷贝的关系 
+
 ### immutable.js使用过程中的一些注意点
 
 * fromJS和toJS会深度转换数据，随之带来的开销较大，尽可能避免使用，单层数据转换使用Map()和List()
