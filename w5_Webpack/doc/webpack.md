@@ -86,7 +86,7 @@ WebPack可以看做是模块打包机：它做的事情是，分析你的项目�
     - production（默认）
     - development
     - none
-* modules
+* module
   - rules: 配置Loader（加载器）规则（[详情](#Loader（加载器）)）
 * plugin:插件（[详情](#Plugins（插件）)）
 * resolve
