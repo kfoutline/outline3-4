@@ -72,3 +72,68 @@ React Native 看起来很像 React，只不过其基础组件是原生组件而�
 
 ### API
 > 详情请查看官网 https://facebook.github.io/react-native/
+
+
+## ReactNative UI框架
+
+### react-native-elements
+1. 安装`react-native-elements`
+```bash
+    # yarn
+    yarn add react-native-elements
+
+    # npm
+    npm i react-native-elements --save
+```
+2. 安装`react-native-vector-icons`
+```bash
+    yarn add react-native-vector-icons
+
+    # npm
+    npm i --save react-native-vector-icon
+```
+3. 关联原生库
+```bash
+    react-native link react-native-vector-icons
+```
+
+4. 使用
+```jsx
+    import {Button,SearchBar} from 'react-native-elements';
+
+    class MyComponent extends Component{
+        state = {
+            keyword:'',
+        }
+        changeKeyword=(keyword)=>{
+            this.setState({
+                keyword
+            })
+        }
+        render(){
+            return <View>
+                <SearchBar
+                    placeholder="Type Here..."
+                    onChangeText={this.changeKeyword}
+                    value={this.state.keyword}
+                />
+                <Button title="搜索"></Button>
+            </View>
+        }
+    }
+```
+>PS： android中如无法看到小图标，需要在`android/app/build.gradle`中添加字体图标`apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"`
+
+## 打包
+* android APK
+    1. 生成一个签名密钥
+    ```bash
+        keytool -genkeypair -v -keystore my-release-key.keystore -alias my-key-alias -keyalg RSA -keysize 2048 -validity 10000
+    ```
+    2. 设置 gradle 变量
+    3. 把签名配置加入到项目的 gradle 配置中
+    4. 打包
+    ```bash
+        # 进入android目录
+        ./gradlew assembleRelease
+    ```
