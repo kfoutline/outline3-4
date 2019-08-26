@@ -7,6 +7,8 @@
     yarn global add @vue/cli
 ```
 ### 依赖与扩展
+> 以下依赖会自动安装
+
 * @vue/cli-service
     * @vue/cli-service-global
 * webpack

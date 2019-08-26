@@ -1,23 +1,27 @@
 # NodeJS
 
-## 复习
+## 复习二阶段内容
 
 ### http服务器
-
-> 静态资源服务器
-
-* 使用模块
-    * http
-    * fs
-    * url
-    * path
-* 了解文件mime类型
+* 静态资源服务器
+    * 使用模块
+        * http
+        * fs
+        * url
+        * path
+    * 了解文件mime类型
 
 * 部署到服务器
 
+### 模块化规范
+* CMD           require.js
+* AMD           sea.js
+* CommonJS      node.js
+* ES Module     ES6
+
 ### 模块分类
 
->模块系统是 Nodejs 最基本也是最常用的。一般情况模块可分为四类：
+>模块系统是 Nodejs 最基本也是最常用的，采用commonJS规范。一般情况模块可分为四类：
 
 * 自定义模块
 * 原生模块（Nodejs内置模块）
@@ -79,10 +83,3 @@ module.exports = hello;
 * require 方法中的文件查找策略
 
 ![require](./img/模块加载过程.jpg "查找策略")
-
-## 知识点
-
-* 服务器知识
-    * 前端与后端
-    * BSR与SSR
-* ejs模板引擎

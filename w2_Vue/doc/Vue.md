@@ -142,13 +142,25 @@ Vue.js 是一个基于MVVM模式的一套渐进式框架。它是以数据驱动
 > 遍历data中所有属性，通过Object.defineProperty()方法把它们设置为存储器属性（getter & setter），并写入Vue实例
 
 * 存储器属性（getter & setter）
-* **双向数据绑定原理**
-	* View -> Model
-	* Model -> View
+```js
+    let laoxie = {
+        firstName:'lao',
+        lastName:'xie',
+        get fullName(){
+            return this.firstName + ' ' + lastName
+        },
+        set(val){
+            let username = val.split(' ');
+            this.firstname = username[0];
+            this.lastName = username[1];
+        }
+    }
+```
+
 * 设置响应式属性
-	* 设置初始化数据
+	* 设置初始化数据data
 	* Vue.set(target,key,val) 向**响应式系统**中的对象添加属性并自动渲染视图
-			> 注意：target对象不能是 Vue 实例，或者 Vue 实例的根数据对象
+		> 注意：target对象不能是 Vue 实例，或者 Vue 实例的根数据对象
 	* 数组变异方法
 
 ### 内置属性
@@ -193,20 +205,25 @@ Vue.js 是一个基于MVVM模式的一套渐进式框架。它是以数据驱动
 
 ### 生命周期函数（钩子函数）
 
->在某个时刻被自动执行的函数，this指向实例，以下为1.x与2.x钩子函数对照表：
+>在某个时刻被自动执行的函数，生命周期函数中的this指向实例，以下为v1.x与v2.x钩子函数对照表：
 
 <img src="./img/lifecycle_hooks.png"/>
 
 * beforeCreate()
+    * 初始化完成，但为往实例添加属性
     * 应用：可以在这加个loading事件 
 * created()
     * 应用：在这结束loading，还做一些初始化，实现函数自执行
 * beforeMount()
+    * 可以获取节点，但数据未渲染
     * 应用：在这发起ajax请求，拿回数据，配合路由钩子做一些事情
-* mounted(): 数据挂载成功
+* mounted()
+    >实例挂载到 DOM 
     * 应用：节点操作
 * beforeUpdate()
+    * 数据有更新但未更新节点
 * updated()
+    * 更新节点完毕
 * beforeDestroy()
 * destroyed()
     > 执行destroy()后，不会改变已生成的DOM节点，但后续就不再受vue控制了
@@ -215,7 +232,7 @@ Vue.js 是一个基于MVVM模式的一套渐进式框架。它是以数据驱动
 
 ## 指令directive
 
-指令是带有 v-* 前缀的特殊属性，格式：`v-指令名:参数.修饰符`
+指令是带有 v-* 前缀的特殊属性，格式：`v-指令名:参数.修饰符="值"`
 
 ### 内置指令
 
@@ -232,7 +249,7 @@ Vue.js 是一个基于MVVM模式的一套渐进式框架。它是以数据驱动
             <!-- 简写  -->
             <img :src="imgurl">
         ```
-        - 对style与class的绑定
+        * 对style与class的绑定
             > 在将 v-bind 用于 class 和 style 时，Vue做了专门的增强。表达式结果的类型除了字符串之外，还可以是对象或数组
        
         ```html
@@ -252,43 +269,56 @@ Vue.js 是一个基于MVVM模式的一套渐进式框架。它是以数据驱动
             </script>
             <!-- 最终结果：<div class="static active" style="color:red;font-size:30px"></div> -->
         ```
+        * v-bind无参数绑定对象
+        ```html
+            <div v-bind="{username:'laoxie',age:18,gender:'男'}"></div>
+            <!-- 等效于 -->
+            <div v-bind:username="laoxie" v-bind:age="18" v-bind:gender="男"></div>
+        ```
+* v-model双向数据绑定
+    > v-model一般用于表单元素，会忽略所有表单元素的 value、checked、selected 特性的初始值而总是将 Vue 实例的数据作为数据来源
+
+    * v-model值绑定到value属性
+        * 单行文本框text
+        * 多行文本框textarea
+        * 单选框radio
+        * 选择框select（无value属性则与内容绑定）
+
+    * 复选框checkbox
+        * 初始值为数组，与value属性绑定
+        * 初始值为其他，与checked属性绑定(true,false)
+            * true-value：设置选中时的值
+            * false-value：设置补选中时的值
+    * 修饰符
+        * lazy      input触发改成change触发
+        * number    输出值为number类型
+        * trim      自动清楚前后空格
+    * **双向数据绑定原理**
+        * Model -> View     响应式属性
+        * View -> Model     事件
+    * v-model的原理（替代方案）
+        * v-bind:value="val"
+        * v-on:input="val=$event.target.value"
+            > 组件中使用v-model等效于：v-on:input="val=arguments[0]"
 * 列表渲染
     * v-for
         > 可遍历Array | Object | number | string | Iterable
 
         * 遍历数组
         ```html
-            <li v-for = "(value, index) in arr">{{value}}</li>
+            <li v-for="(value, index) in arr">{{value}}</li>
         ```
         * 遍历对象
         ```html
-            <tr v-for = "(value, key, index) in obj">
+            <tr v-for="(value, key, index) in obj">
                 <td>{{index+1}}</td>
                 <td>{{key}}-{{value}}</td>
             </tr>
         ```
-    * key：Vue 识别DOM节点的一个通用机制
-        > Vue对相同的元素进行展示排序等操作时，遵循“就地复用”原则，指定key属性后，意为去掉“就地复用”特性（建议尽可能在使用 v-for 时提供 key）
-* v-model双向数据绑定
-    > v-model一般用于表单元素，会忽略所有表单元素的 value、checked、selected 特性的初始值而总是将 Vue 实例的数据作为数据来源
-
-    - 单行文本框text
-        > v-model值绑定到value属性
-    - 多行文本框textarea
-        > v-model值绑定到value属性
-    - 单选框radio
-        > v-model值绑定到value属性
-    - 复选框checkbox
-        + 初始值为数组，与value属性绑定
-        + 初始值为其他，与checked属性绑定(true,false)
-            + true-value：设置选中时的值
-            + false-value：设置补选中时的值
-    - 选择框select
-        > v-model值绑定到value属性，无value属性则与内容绑定
-    - 修饰符
-        - lazy
-        - number
-        - trim
+    * key：Vue 识别DOM节点的一个通用机制（用于diff算法）
+        > Vue对相同的元素进行展示排序等操作时，遵循“就地复用”原则，因为这样更加高效，性能更好
+        > 但对于依赖子组件状态或临时 DOM 状态 (如：表单输入值、复选框选中等)的列表，会出现操作混乱的问题，
+        > 指定key属性后，意为去掉“就地复用”特性（建议尽可能在使用 v-for 时提供 key）
 
 #### 显示隐藏
 
@@ -347,7 +377,7 @@ Vue.js 是一个基于MVVM模式的一套渐进式框架。它是以数据驱动
             > 仅在update 和 componentUpdated 钩子中可用
 
 ```javascript
-   // 使用指令：v-laoxie
+    // 使用指令：v-laoxie
     Vue.directive('laoxie', {
       bind: function (el, binding, vnode) {
 
@@ -360,37 +390,6 @@ Vue.js 是一个基于MVVM模式的一套渐进式框架。它是以数据驱动
           'modifiers: '  + JSON.stringify(binding.modifiers) + '<br>' //指令修饰符
       }
     });
-```
-
-
-## 过滤器
-
-Vue允许你自定义过滤器，可被用于一些常见的文本格式化。
-过滤器可以用在两个地方：双花括号插值和 v-bind
-
-```html
-    <!-- 在双花括号中 -->
-    {{ message | capitalize }}
-
-    <!-- 在 `v-bind` 中 -->
-    <div v-bind:id="rawId | formatId"></div>
-```
-
-### 全局过滤器
-
-> 格式：Vue.filter(name,definition)
-
-### 局部过滤器
-
-> 格式:filters属性
-
-```javascript
-    // 首字母大写
-    Vue.filter('capitalize', function (value) {
-      if (!value) return ''
-      value = value.toString()
-      return value.charAt(0).toUpperCase() + value.slice(1)
-    })
 ```
 
 ---
