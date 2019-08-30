@@ -46,8 +46,12 @@
     vue add vuex
 ```
 
-## jvue.config.js配置
+## vue.config.js配置
 * publicPath
 * outputDir
 * assetsDir
+    >相对于outputDir
 * runtimeCompiler
+    >是否使用包含运行时编译器的 Vue 构建版本(vue.esm.js)
+* devServer
+    >测试服务器，与webpack一致

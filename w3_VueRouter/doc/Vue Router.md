@@ -52,7 +52,7 @@ Vue-Router是通过插件的形式来扩展Vue的功能，所以要使用它，�
     * components：在多视图组件中，给每个命名视图指定路由组件
         > 一般用于多个`view-router`的场景
     * props（Boolean|Object|Function）：路由组件传参（[详情](#路由传参)） 
-    * redirect（String|Object）：重定向
+    * redirect（String|Object|Function）：重定向
     * children（Array）：嵌套路由配置
         >子路由一般使用相对路径的path
 
@@ -122,8 +122,6 @@ Vue-Router是通过插件的形式来扩展Vue的功能，所以要使用它，�
         this.$router.push({path:'/goods',query:{id:123}})
     ```
 
-#### 定义时传参
-
 * 动态路由传入
     ```javascript
         //路由组件
@@ -156,6 +154,8 @@ Vue-Router是通过插件的形式来扩展Vue的功能，所以要使用它，�
             }
         }
     ```
+
+#### 定义时传参
 
 * props
     > 以上通过`$route.params.id`获取参数方式较为繁琐,而且组件与路由高度耦合，可以使用props组件传参的方式解耦
