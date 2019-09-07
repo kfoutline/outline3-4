@@ -259,9 +259,3 @@ new Vue({
   })
 
 ```
-
-## 服务端渲染SSR
-
-### vue-server-renderer
-
-### Nuxt.js

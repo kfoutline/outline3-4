@@ -23,12 +23,13 @@ TypeScript由微软开发的自由和开源的编程语言，设计目标是开�
     * number
     * boolean
     * any
-```ts
-    let username:string = 'laoxie';
-    let age:number = 18;
 
-    username = 123456;//在编译时报错
-```
+    ```ts
+        let username:string = 'laoxie';
+        let age:number = 18;
+
+        username = 123456;//在编译时报错
+    ```
 * 数组
 ```ts
     let arr:number[] = [10,20,30]

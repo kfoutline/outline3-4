@@ -225,7 +225,7 @@ MongoDB是一个基于分布式文件存储的数据库，由C++语言编写，�
 
     ```js
         //查询user下所有数据
-        db.user.find().toArray((result)=>{});
+        db.user.find().toArray((err,result)=>{});
         
         // 查询user下年龄为38的
         db.user.find({age:38}).toArray()
