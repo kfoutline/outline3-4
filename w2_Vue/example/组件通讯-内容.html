@@ -38,10 +38,10 @@
                     * 具名插槽
                         * 组件模板：给<slot/>设置name属性：<slot name="myheader"/>
                         * 组件内容：<template v-slot:myheader>xxx</template>,xxx自动写入相应slot的所在位置
-                * 内->外:
+                * 内->外:作用域插槽
                     * 给v-slot添加属性值：<template v-slot:myheader="headProps">xxx</template>
                         v-slot只能用在组件上或组件内的template标签上
-                    * headProps为保存模板中对应<slot/>组件所有属性的对象
+                    * headProps为<slot/>作用域对象，保存<solt/>所有props属性的对象
 
         */
        const myHeader = {

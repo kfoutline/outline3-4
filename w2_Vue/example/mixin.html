@@ -19,11 +19,7 @@
                 * 局部mixins
         */
 
-        Vue.mixin({
-            created(){
-                console.log('global mixin -> created:',this.name)
-            }
-        });
+        
         Vue.component('myButton',{
             data(){
                 return {
@@ -32,7 +28,11 @@
             },
             template:`<button>按钮{{name}}</button>`
         });
-        
+        Vue.mixin({
+            created(){
+                console.log('global mixin -> created:',this.name)
+            }
+        });
         let myMixin = {
             created(){
                 console.log('local mixin -> myMixin:',this.name)

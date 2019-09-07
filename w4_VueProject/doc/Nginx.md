@@ -1,5 +1,7 @@
 # Nginx
 
+Nginx是一款轻量级的Web 服务器/反向代理服务器及电子邮件（IMAP/POP3）代理服务器。其特点是占有内存少，并发能力强，nginx网站用户有：BAT、京东、新浪、网易等。
+
 ## 安装
 1. 下载：http://nginx.org/en/download.html
 2. 解压到某个位置
@@ -46,18 +48,16 @@
 ### 代理服务器
 反向代理（Reverse Proxy）方式是指以代理服务器来接受客户端请求，然后将请求转发给内部网络上的服务器（目标服务器），并将从目标服务器上得到的结果返回给客户端得行为
 ```confg
-    # 通过8020端口代理真实服务地址（8080）
+    # 通过8020端口代理真实服务地址（3000）
     server {
         listen       8020;
         server_name  localhost;
 
         location / {
-            proxy_pass http://127.0.0.1:8080;
-        }
-
-        error_page   500 502 503 504  /50x.html;
-        location = /50x.html {
-            root   html;
+            proxy_pass http://127.0.0.1:3000;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         }
 
     }
