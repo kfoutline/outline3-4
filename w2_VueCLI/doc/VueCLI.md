@@ -55,3 +55,14 @@
     >是否使用包含运行时编译器的 Vue 构建版本(vue.esm.js)
 * devServer
     >测试服务器，与webpack一致
+
+## 问题
+* 图片无法显示的问题
+    1. 使用相对路径
+    ```js
+        url('./image.png') 会被翻译为 require('./image.png')，而：
+    ```
+    2. 放到public文件夹张，使用绝对路径
+    >不经过webpack处理
+    3. 变量
+        * require.context()
