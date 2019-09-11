@@ -17,8 +17,6 @@ React官网地址：http://facebook.github.io/react/
 >React 中的数据是单向自顶向下传递的，React 之所以能胜任大型复杂前端项目的开发，是因为其 单向数据流 这一重要特性
 * JSX扩展
 >JSX 是 JavaScript 语法的扩展。React 开发不一定使用 JSX ，但我们建议使用它。
-* 灵活
->React可以与已知的库或框架很好地配合。
 
 
 ## 安装与引入
@@ -28,14 +26,6 @@ React官网地址：http://facebook.github.io/react/
 * react-dom.js      提供与 DOM 相关的功能
 * babel.js          React使用ES6语法和浏览器不支持的JSX语法，所以必须引用Babel进行编译
 >在浏览器中使用 Babel 来编译 JSX 效率是非常低的
-
-### 通过webpack手动搭建React环境
-
->通过webpack + es6来使用react，所以需要安装以下模块来搭建环境
-
-* react & react-dom
-* babel-loader & babel-core & babel-preset-react
-* webpack & webpack-cli & webpack-dev-server
 
 ### 通过脚手架快速搭建React环境
 
@@ -50,6 +40,15 @@ React官网地址：http://facebook.github.io/react/
 ```bash
     create-react-app my-app
 ```
+
+### 通过webpack手动搭建React环境
+
+>通过webpack + es6来使用react，所以需要安装以下模块来搭建环境
+
+* react & react-dom
+* babel-loader & @babel/core & @babel/preset-react
+* webpack & webpack-cli & webpack-dev-server
+
 
 ## 使用
 
@@ -78,9 +77,7 @@ React官网地址：http://facebook.github.io/react/
 * ReactDOM.render(template,targetDOM)
     >是React的最基本方法，用于将模板转为HTML语言，并插入指定的DOM节点
 
-    - template：可以是HTML标签或 React 组件，React利用大小写来区分标签与组件
-        - 要渲染 HTML 标签，只需在 JSX 里使用小写字母的标签名。
-        - 要渲染 React 组件，只需创建一个大写字母开头的本地变量
+    - template：可以是HTML标签或 React 组件
     - targetDOM：挂载点，必须为元素节点
 
 ### JSX语法
@@ -97,8 +94,10 @@ Babel解析规则：
 * 在jsx代码中，同为js关键字的html属性不能直接使用
     * class -> className,
     * for -> htmlFor
+* 属性使用驼峰
     * tabindex -> tabIndex
     * autofocus -> autoFocus
+    * onkeydown -> onKeyDown
     * ......
 * 必须结束标签（如：`<input type="text"/>`）
 * style 属性的值接收一个对象，css 的属性必须为驼峰写法
@@ -151,8 +150,12 @@ Babel解析规则：
 
 ```js
     class About extends React.Component{
+        constructor(){
+            super();
+            this.state = {username:'laoxie'}
+        }
         render(){
-            return <div className="box">类组件{this.props.myname}</div>
+            return <div className="box">类组件{this.state.username}</div>
         }
     }
 ```
@@ -176,6 +179,7 @@ Babel解析规则：
         }
 
         //ES6写法
+        // ES6默认不支持静态属性，需安装@babel/plugin-proposal-class-properties
         static defaultProps = {
             name: 'laoxie'
         }
@@ -316,7 +320,8 @@ Babel解析规则：
 
 ### 高阶组件HOC（High Order Component）
 
-* 高阶组件是参数为组件，返回值为新组件的函数
+* 高阶组件是一个纯函数
+* 高阶组件的参数为组件，返回值为新组件
 * 高阶组件是一种设计模式，类似于装饰器模式
 
 #### 使用场景
@@ -398,7 +403,7 @@ Babel解析规则：
         <button onClick={this.clickHandler}>按钮</button>
     ```
 * bind方式
-    + event事件对象会在所有参数后隐式传递
+    + event对象会在所有参数后隐式传递
     ```js
         //定义
         clickHandler(num1,num2,e){
@@ -436,9 +441,16 @@ Babel解析规则：
     + 定义时使用箭头函数
     + 执行时使用箭头函数
 
-## 获取真实的DOM节点
+## refs
 
-* 通过refs获取节点，并进行节点操作
+* 应用位置
+    * 应用在元素节点上：对节点的引用
+    * 应用在组件上：对组件实例的引用
+    >函数组件不可使用ref
+* 适合使用 refs 的情况：
+    * 管理焦点，文本选择或媒体播放
+    * 触发强制动画
+    * 集成第三方 DOM 库
 ```js
     <button ref="btnSave">保存</button>
 
@@ -459,7 +471,6 @@ Babel解析规则：
 >react利用key来区分组件的
     * 相同的key表示同一个组件，react不会重新销毁创建组件实例，只可能更新；
     * key不同，react会销毁已有的组件实例，重新创建组件新的实例
-* 数组生成的同级同类型的组件上要保持唯一
 * key应该是稳定唯一的，尽量不要用数组的索引index作为key（排序或添加时索引值会改变）
 
 
@@ -477,16 +488,16 @@ React 为每个状态都提供了两种声明周期函数，will 函数在进入
 * componentWillMount 
     >在组件被渲染到页面上之前执行，在组件的整个生命周期内只执行一次
 
-    - 这个时候是做如下操作的好时机：
-        - 发起ajax请求
-        - 设置 setInterval、setTimeout 等计时器操作
-        - 读取本地存储数据
+   
 
 * componentDidMount 
     >组件被渲染到页面上后立马执行，在组件的整个生命周期内只执行一次。
 
     - 这个时候是做如下操作的好时机：
         - 某些依赖组件 DOM 节点的操作
+        - 发起ajax请求
+        - 设置 setInterval、setTimeout 等计时器操作
+        - 读取本地存储数据
 
 * componentWillUpdate(nextProps, nextState)
     >在初始化时不会被调用，可能在以下两种情况下被调用：
