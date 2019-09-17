@@ -60,7 +60,10 @@
 * 图片无法显示的问题
     1. 使用相对路径
     ```js
-        url('./image.png') 会被翻译为 require('./image.png')，而：
+        url('./image.png') 
+        <img src="i./mage.png"/>
+        //会被翻译为 
+        require('./image.png')
     ```
     2. 放到public文件夹张，使用绝对路径
     >不经过webpack处理

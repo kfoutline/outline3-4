@@ -115,8 +115,12 @@ exports.find = async (colName,query={},{skip,limit,sort}={})=>{console.log('quer
 
     let result;
     try{
-        result = await collection.find(query).toArray();
+        result = await collection.find(query);
 
+        // 排序
+        if(sort){
+            result = result.sort({[sort]:-1});
+        }
         // 跳过
         if(skip){
             result = result.skip(skip)
@@ -127,10 +131,8 @@ exports.find = async (colName,query={},{skip,limit,sort}={})=>{console.log('quer
             result = result.limit(limit);
         }
 
-        // 排序
-        if(sort){
-            result = result.sort(sort);
-        }
+        result = await result.toArray()
+
     }catch(err){
         result = err
     }
