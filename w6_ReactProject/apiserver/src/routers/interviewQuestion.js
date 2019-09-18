@@ -6,9 +6,6 @@ const {formatData} = require('../utils');
 
 let colName = 'interviewQuestion'
 
-Router.get('/test',(req,res)=>{
-    res.send('success')
-})
 
 // 新增面试题
 Router.post('/',async (req,res)=>{
@@ -49,20 +46,37 @@ Router.post('/',async (req,res)=>{
     }
 
     res.send(result);
-})
+});
+
+// 添加面试题答案
+Router.post('/answer',(req,res)=>{
+    let {answer,userid} = req.body;
+    let result;
+    try{
+        let data = await db.create('answer',{answer,userid,like:0,unlike:0,addtime:Date.now()});
+        result = formatData()
+    }catch(err){
+        result = formatData({code:400})
+    }
+
+
+    res.send(result)
+});
 
 // 查看所有面试题
-// 支持分页，排序，分阶段
+// 支持分页，排序，分阶段,随机获取
 Router.get('/',async (req,res)=>{
-    let {sort,userid,page=1,size=5,category} = req.query;
-    let skip = (page-1)*size,limit=size;
+    let {sort,page=1,size=5,category,random} = req.query;
+    let skip = (page-1)*size,limit=size*1;
     let result;
-    let query = {}
+    let query = {};
+
+    // 是否根据分类获取
     if(category){
-        query.category = category;
+        query.category = category*1;
     }
     try{
-        let data = await db.find(colName,query,{skip,limit,sort});
+        let data = await db.find(colName,query,{skip,limit,sort,random});
         result = formatData({data})
     }catch(err){
         result = formatData({code:400})
@@ -72,22 +86,6 @@ Router.get('/',async (req,res)=>{
     res.send(result);
 })
 
-// 随机获取面试题
-// 
-Router.get('/random',async (req,res)=>{
-    let {size=5} = req.query;
-    let result;
-
-    try{
-        let data = await db.random(colName,size*1);
-        result = formatData({data})
-    }catch(err){
-        result = formatData({code:400})
-    }
-    
-
-    res.send(result);
-})
 
 Router.route('/:id')
     // 删除

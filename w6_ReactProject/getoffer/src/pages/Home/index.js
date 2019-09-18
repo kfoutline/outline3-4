@@ -14,6 +14,9 @@ class Home extends Component {
   onChange() {
     console.log(arguments);
   }
+  goto = (id)=>{
+    this.props.history.push(`/iq/${id}`);
+  }
   async componentDidMount() {
     // 获取热门面试题
     let { data:hotlist } = await Api.get("/iq", {
@@ -37,7 +40,7 @@ class Home extends Component {
         <Carousel afterChange={this.onChange} autoplay>
           {recommend.map(item => {
             return (
-              <div key={item._id}>
+              <div key={item._id} onClick={this.goto.bind(null,item._id)}>
                 <h3>{item.question}</h3>
               </div>
             );

@@ -12,7 +12,7 @@ class Random extends Component {
     this.setState({
       loading:true
     })
-    let { data } = await Api.get("/iq/random", { size: 5 });
+    let { data } = await Api.get("/iq", { size: 5 ,random:1});
 
     this.setState({
       data,

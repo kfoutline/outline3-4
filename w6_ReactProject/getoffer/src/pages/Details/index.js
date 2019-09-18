@@ -7,7 +7,7 @@ import apiserver from "@/api";
 const Editor = ({ onChange, onSubmit, submitting, value }) => (
   <div>
     <Form.Item>
-      <Input.TextArea rows={4} onChange={onChange} value={value} />
+      <Input.TextArea rows={4} onChange={onChange} value={value} placeholder="如有不同答案，请添加" />
     </Form.Item>
     <Form.Item>
       <Button
@@ -52,7 +52,7 @@ class Details extends Component {
 
     const actions = [
       <span key="comment-basic-like">
-        <Tooltip title="Like">
+        <Tooltip title="赞">
           <Icon
             type="like"
             theme={action === "liked" ? "filled" : "outlined"}
@@ -61,10 +61,10 @@ class Details extends Component {
         </Tooltip>
         <span style={{ paddingLeft: 8, cursor: "auto" }}>{likes}</span>
       </span>,
-      <span key=' key="comment-basic-dislike"'>
+      <span key="comment-basic-dislike">
         <Tooltip title="Dislike">
           <Icon
-            type="dislike"
+            type="踩"
             theme={action === "disliked" ? "filled" : "outlined"}
             onClick={this.dislike}
           />

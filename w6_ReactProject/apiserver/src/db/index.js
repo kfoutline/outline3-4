@@ -29,7 +29,6 @@ async function connect() {
  * @增
  */
 exports.create = async (colName, data) => {
-  console.log("data:", data);
   let { db, client } = await connect();
 
   // 根据colName获取集合
@@ -109,9 +108,9 @@ exports.update = async (colName, query, data) => {
 /**
  * @查
  */
-exports.find = async (colName, query = {}, { skip, limit, sort } = {}) => {
-  let { db, client } = await connect();
-  console.time("find"); //{_id:'xxx'}
+exports.find = async (colName, query = {}, { skip, limit, sort,random=false } = {}) => {
+  let { db, client } = await connect();console.log(query,skip, limit, sort,random)
+
   let collection = db.collection(colName);
 
   if (query._id) {
@@ -122,7 +121,7 @@ exports.find = async (colName, query = {}, { skip, limit, sort } = {}) => {
 
   let result;
   try {
-    result = collection.find(query);
+    result = random ? collection.aggregate([ { $sample: { size:limit} } ]) : collection.find(query);
 
     // 排序
     if (sort) {
@@ -151,7 +150,6 @@ exports.find = async (colName, query = {}, { skip, limit, sort } = {}) => {
 
   // 关闭当前连接，释放资源
   client.close();
-  console.timeEnd('find')
   return result;
 };
 
@@ -159,7 +157,7 @@ exports.find = async (colName, query = {}, { skip, limit, sort } = {}) => {
  * @随机查询
  * aggregate( [ { $sample: { size: N } } ] ) 
  */
-exports.random = async (colName, size) => {
+/* exports.random = async (colName, size) => {
     let { db, client } = await connect();
     let collection = db.collection(colName);
   
@@ -176,7 +174,7 @@ exports.random = async (colName, size) => {
     client.close();
   
     return result;
-  };
+  }; */
   
 
 /**
