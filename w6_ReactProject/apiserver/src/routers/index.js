@@ -6,7 +6,8 @@ const regRouter = require('./reg');
 const loginRouter = require('./login');
 const uploadRouter = require('./upload');
 const iqRouter = require('./interviewQuestion');
-const cateRouter = require('./category');
+const categoryRouter = require('./category');
+const answerRouter = require('./answer');
 
 // 跨域设置
 Router.use( function(req, res, next) {
@@ -33,6 +34,7 @@ Router.use('/login',loginRouter);
 Router.use('/reg',regRouter);
 Router.use('/list',listRouter);
 Router.use('/iq',iqRouter);
-Router.use('/category',cateRouter);
+Router.use('/category',categoryRouter);
+Router.use('/answer',answerRouter);
 
 module.exports = Router;

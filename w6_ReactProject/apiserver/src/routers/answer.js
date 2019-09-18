@@ -8,7 +8,7 @@ let colName = 'answer'
 
 
 // 添加面试题答案
-Router.post('/',(req,res)=>{
+Router.post('/',async (req,res)=>{
     let {answer,userid} = req.body;
     // let result;
     // try{
@@ -18,7 +18,7 @@ Router.post('/',(req,res)=>{
     //     result = formatData({code:400})
     // }
     
-    let result = db.dispatch('create',colName,{answer,userid,like:0,dislike:0,addtime:Date.now()})
+    let result = await db.dispatch('create',colName,{answer,userid,like:0,dislike:0,addtime:Date.now()})
 
     res.send(result)
 });
@@ -30,7 +30,7 @@ Router.route('/:id')
     .delete(async (req,res)=>{
         let {id} = req.params;
         
-        let result = db.dispatch('create',colName,{_id:id})
+        let result = await db.dispatch('create',colName,{_id:id})
         res.send(result);
     })
 
@@ -38,7 +38,7 @@ Router.route('/:id')
     .patch(async (req,res)=>{
         let {id} = req.params;
         
-        let result = db.dispatch('update',colName,{_id:id},{...req.body})
+        let result = await db.dispatch('update',colName,{_id:id},{...req.body})
         res.send(result);
     })
 

@@ -48,21 +48,6 @@ Router.post('/',async (req,res)=>{
     res.send(result);
 });
 
-// 添加面试题答案
-Router.post('/answer',(req,res)=>{
-    let {answer,userid} = req.body;
-    let result;
-    try{
-        let data = await db.create('answer',{answer,userid,like:0,unlike:0,addtime:Date.now()});
-        result = formatData()
-    }catch(err){
-        result = formatData({code:400})
-    }
-
-
-    res.send(result)
-});
-
 // 查看所有面试题
 // 支持分页，排序，分阶段,随机获取
 Router.get('/',async (req,res)=>{
