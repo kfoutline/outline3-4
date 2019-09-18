@@ -124,9 +124,10 @@ Reducer 必须是一个**纯函数**，用于指定state修改逻辑，它接受
 * 处理多个Reducer：combineReducers
 ```js
     import { createStore,combineReducers } from "redux";
-    const productsReducer = function(state=[], action) {
-      return state;
-    }
+
+    import productsReducer from './productsReducer';
+    import cartReducer from './cartReducer';
+
     //合并Reducer
     const allReducers = {
       products: productsReducer,
@@ -238,7 +239,7 @@ redux中的action仅支持原始对象（plain object），处理有副作用的
         * call
         * apply
         * put
-        * takeAvery
+        * takeEvery
         * takeLatest
 
 ### 使用中间件
