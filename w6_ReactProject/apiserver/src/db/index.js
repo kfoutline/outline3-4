@@ -5,6 +5,7 @@
 //  引入模块中的客户端对象
 const { MongoClient, ObjectId } = require("mongodb");
 const { mongo: mongourl, database } = require("../config.json");
+const {formatId} = require('../utils')
 
 //  利用MongoClient连接数据
 // Nodejs某些方法的特性：
@@ -37,11 +38,13 @@ exports.create = async (colName, data) => {
   //     // 插入成功后的回调
   // });
 
+  if(!Array.isArray(data)){
+    data = [data];
+  }
+
   let result;
   try {
-    result = await collection[Array.isArray(data) ? "insertMany" : "insertOne"](
-      data
-    );
+    result = await collection.insertMany(data);
   } catch (err) {
     result = err;
   }
@@ -65,7 +68,7 @@ exports.delete = async (colName, query) => {
   if (query._id) {
     // 通过id查询数据必须使用这种格式
     // _id:'xxx' -> _id:ObjectId('xxx');
-    query._id = ObjectId(query._id);
+    query._id = formatId(query._id);
   }
 
   let result;
@@ -83,18 +86,21 @@ exports.delete = async (colName, query) => {
 
 /**
  * @改
+ * @Params {String} colName   集合名称
+ * @Params {Object} query   查询条件
+ * @Params {Object} data   修改对象（包含$set,$inc等）
  */
 exports.update = async (colName, query, data) => {
   let { db, client } = await connect();
   let collection = db.collection(colName);
 
   if (query._id) {
-    query._id = ObjectId(query._id);
+    query._id = formatId(query._id);
   }
 
   let result;
   try {
-    result = await collection.updateOne(query, { $set: data });
+    result = await collection.updateMany(query, data);
   } catch (err) {
     result = err;
   }
@@ -108,21 +114,22 @@ exports.update = async (colName, query, data) => {
 /**
  * @查
  */
-exports.find = async (colName, query = {}, { skip, limit, sort,random=false } = {}) => {
-  let { db, client } = await connect();console.log(query,skip, limit, sort,random)
+exports.find = async (colName, query = {}, { fields={},random=false,total,options:{skip, limit, sort}={} } = {}) => {
+  let { db, client } = await connect();
 
   let collection = db.collection(colName);
 
   if (query._id) {
     // 通过id查询数据必须使用这种格式
     // _id:'xxx' -> _id:ObjectId('xxx');
-    query._id = ObjectId(query._id);
+    query._id = formatId(query._id);
   }
+
 
   let result;
   try {
-    result = random ? collection.aggregate([ { $sample: { size:limit} } ]) : collection.find(query);
-
+    result = random ? collection.aggregate([ { $sample: { size:limit} } ]) : collection.find(query,fields);
+    
     // 排序
     if (sort) {
         // sort格式：sort=price,1
@@ -141,9 +148,15 @@ exports.find = async (colName, query = {}, { skip, limit, sort,random=false } = 
     if (limit) {
       result = result.limit(limit);
     }
-
+    let count = await (random ? collection.find().count():result.count());
     result = await result.toArray();
+    if(total){
+      result = {
+        result,
+        total:count
+      }
 
+    }
   } catch (err) {
     result = err;
   }
@@ -182,9 +195,11 @@ exports.find = async (colName, query = {}, { skip, limit, sort,random=false } = 
  */
 const { formatData } = require("../utils");
 exports.dispatch = async function(method, colName, query = {}, options = {}) {
+  // method==create: query为data
+  // method==update: options为data
   try {
     let data = await this[method](colName, query, options);
-    result = method === "find" ? formatData({ data }) : formatData();
+    result = formatData({ data });
   } catch (err) {
     result = formatData({ code: 400 });
   }

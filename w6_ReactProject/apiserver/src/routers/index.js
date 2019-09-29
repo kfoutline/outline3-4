@@ -2,7 +2,7 @@ const express = require('express');
 const Router = express.Router();
 
 const listRouter = require('./list');
-const regRouter = require('./reg');
+const userRouter = require('./user');
 const loginRouter = require('./login');
 const uploadRouter = require('./upload');
 const iqRouter = require('./interviewQuestion');
@@ -31,10 +31,10 @@ Router.use(express.json(),express.urlencoded({ extended: false }));
 // 配置路由信息
 Router.use('/upload',uploadRouter);
 Router.use('/login',loginRouter);
-Router.use('/reg',regRouter);
 Router.use('/list',listRouter);
 Router.use('/iq',iqRouter);
 Router.use('/category',categoryRouter);
 Router.use('/answer',answerRouter);
+Router.use('/user',userRouter);
 
 module.exports = Router;

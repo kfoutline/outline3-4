@@ -1,6 +1,6 @@
 import React from 'react'
 import {Breadcrumb} from 'antd'
-export default function({ data = ["首页"] }) {console.log(data)
+export default function({ data = ["首页"] }) {
   return (
     <Breadcrumb style={{ margin: "16px 0" }}>
         {

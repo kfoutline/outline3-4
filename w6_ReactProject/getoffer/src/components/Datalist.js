@@ -1,12 +1,13 @@
 import React from "react";
 import {withRouter} from 'react-router-dom';
-import { Button, Table } from "antd";
+import { Button, Table,Rate,Icon } from "antd";
+
+import './Datalist.scss'
 
 let defaultData = [
 ];
-let sections = ['一','二','三','人事','其他']
 
-function List({ data = defaultData,history,pagination=false }) {
+function Datalist({ data = defaultData,history,pagination=false }) {
   const columns = [
     {
       title: "#",
@@ -18,19 +19,29 @@ function List({ data = defaultData,history,pagination=false }) {
     {
       title: "面试题",
       dataIndex: "question",
+      width:400,
     },
+    // {
+    //   title: "阶段",
+    //   dataIndex: "category",
+    //   render(text,row,idx){console.log('row:',row)
+    //     return <Button size="small" shape="round">
+    //     {isNaN(text) ? text : text+'阶段'}
+    //     </Button>;
+    //   }
+    // },
     {
-      title: "阶段",
-      dataIndex: "category",
-      render(text,row,idx){
-        return <Button size="small" shape="round">
-        {isNaN(text) ? text : text+'阶段'}
-        </Button>;
-      }
+      title: "难度",
+      dataIndex: "difficulty",
+      render(text){
+        return <Rate value={text} style={{margin:0}} disabled character={<Icon type="right-square" />} />
+      },
+      sorter: (a, b) => b.difficulty - a.difficulty,
     },
     {
       title: "热度",
       dataIndex: "hot",
+      sorter: (a, b) => b.hot - a.hot,
     },
     {
       title: "操作",
@@ -62,4 +73,4 @@ function List({ data = defaultData,history,pagination=false }) {
   );
 }
 
-export default withRouter(List);
+export default withRouter(Datalist);

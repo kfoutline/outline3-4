@@ -12,7 +12,7 @@ Router.post('/',async (req,res)=>{
     
     let result;
     try{
-        await db.create(colName,{name:category,code})
+        await db.create(colName,{name:category,code,addtime:new Date()})
         result = formatData();
     }catch(err){
         result = formatData({code:400})
@@ -26,7 +26,7 @@ Router.get('/',async (req,res)=>{
     let result;
     let {skip,limit,sort} = req.query;
     try{
-        let data = await db.find(colName,{},{skip,limit,sort});
+        let data = await db.find(colName,{},{options:{skip,limit,sort}});
         result = formatData({data})
     }catch(err){
         result = formatData({code:400})

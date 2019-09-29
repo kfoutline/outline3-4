@@ -1,26 +1,30 @@
 import React, { Component } from "react";
-import { Button, Tabs,List } from "antd";
+import { Button, Tabs,List,Select } from "antd";
 const { TabPane } = Tabs;
+const {Option} = Select;
 
 import Api from "@/api";
-import IQList from "@@/List";
+import Datalist from "@@/Datalist";
 
 class Section extends Component {
   state = {
     sections:[],
+    pageSize:5,
   }
   changeTab = (code) => {
     
     let currentTabData = this.state.sections.filter(item=>item.code==code)[0];
-    console.log('code',code,currentTabData)
     if(currentTabData && currentTabData.data) return;
 
     this.getTabData(code);
   }
-  getTabData = async code=>{
+
+  getTabData = async (code,page=1,pageSize=this.state.pageSize)=>{
     let sections = [...this.state.sections];
     let {data} = await Api.get('/iq',{
-      category:code
+      category:code,
+      page,
+      size:pageSize
     });
 
     // 把数据写入相应tab
@@ -31,7 +35,8 @@ class Section extends Component {
     })
 
     this.setState({
-      sections
+      sections,
+      pageSize
     })
   }
   async componentDidMount(){
@@ -45,7 +50,7 @@ class Section extends Component {
     this.getTabData(data[0].code);
   }
   render() {
-    let {sections,data} = this.state;
+    let {sections,data,pageSize} = this.state;
     return (
       <div>
         <h1>阶段面试题</h1>
@@ -54,13 +59,31 @@ class Section extends Component {
           {
             sections.map(item=>{
               return <TabPane tab={item.name} key={item.code}>
-                <IQList data={item.data} pagination={{pageSize:5}} />
+                {
+                  item.data 
+                  ? 
+                  <Datalist data={item.data.result} pagination={{
+                    size:'small',
+                    pageSize,
+                    pageSizeOptions:['5','10','20'],
+                    showSizeChanger:true,
+                    total:item.data.total,
+                    onChange:(page,pageSize)=>{
+                      this.getTabData(item.code,page,pageSize);
+                    },
+                    onShowSizeChange:(page, pageSize)=>{
+                      this.getTabData(item.code,page,pageSize);
+                    }
+                  }} />
+                  :
+                  <Datalist />
+                }
+                
               </TabPane>
             })
           }
           
         </Tabs>
-        <Button type="primary" icon="redo" ghost block>换一批</Button>
       </div>
     );
   }

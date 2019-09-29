@@ -1,4 +1,4 @@
-
+const token = require('./token'); console.log('token',token)
 /**
  * 模块化开发
  * 一个文件就是一个模块
@@ -14,6 +14,47 @@ function formatData({data=[],msg='success',status=200}={}){
         msg,
         status
     }
+}
+
+/**
+ * 格式化查询条件
+ * @param {Object} params 
+ * @param {Array} keys 
+ */
+function formatParams(params,keys){
+    let res = {}
+    for(let key in params){
+        // 过滤值为undefined的属性
+        if(keys.includes(key) && params[key] !== undefined){
+            res[key] = params[key];
+        }
+    }
+    return res;
+}
+
+
+/**
+ * 'xxx'格式化成ObjectId('xxx')
+ * @param {String} id 
+ */
+const {ObjectId} = require('mongodb');
+function formatId(data){
+    // 'xxx'
+    if(typeof data === 'string'){
+        return ObjectId(data)
+    }
+
+    // ['xxxx','xxxx','xxxx']
+    if(Array.isArray(data)){
+        return data.map(item=>formatId(item))
+    }
+    
+    // {$in:['xxxx','xxxx','xxxx']}
+    let res = {}
+    for(let key in data){
+        res[key] = formatId(data[key])
+    }
+    return res;
 }
 
 
@@ -42,6 +83,9 @@ function decrypt(encrypted, key,{type='aes-256-ecb',outType='base64',encode='utf
 
 module.exports = {
     formatData,
+    formatId,
+    formatParams,
     encrypt,
-    decrypt
+    decrypt,
+    token
 }

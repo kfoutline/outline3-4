@@ -1,13 +1,16 @@
 import React, { Component } from "react";
-import { Button, Input, List, Menu, Dropdown, Icon } from "antd";
+import {connect} from 'react-redux';
+import { Button, Input, List, Menu, Dropdown, Icon,message } from "antd";
 
-import apiserver from '@/api'
+import Api from '@/api'
+import {withAuth} from '@/utils';
 
+@withAuth
 class Add extends Component {
   state = {
     interviewQuestions: "",
     result: [],
-    category: ["一阶段", "二阶段", "三阶段", "人事"]
+    category: []
   };
   onChange = e => {
     let interviewQuestions = e.currentTarget.value;
@@ -16,12 +19,12 @@ class Add extends Component {
       //   result: this.formatData(interviewQuestions)
     });
   };
-  changeCategory = (idx, { key }) => {
-    let result = this.state.result.map((item, i) => {
+  changeCategory = (idx, { key ,item}) => {
+    let result = this.state.result.map((iq, i) => {
       if (i === idx) {
-        item.category = key;
+        iq.category = key;
       }
-      return item;
+      return iq;
     });
     this.setState({
       result
@@ -30,7 +33,7 @@ class Add extends Component {
   formatData(data) {
     // string -> array
     if (!data) return [];
-    data = data.trim().replace(/^[\*\d\s]+[、，\,\.]?|[？\?。\.；\;]$/gm, "");
+    data = data.trim().replace(/^[\*\d\s]+[、\\，\,\.]?|[？\?。\.；\;]$/gm, "");
     return data.split("\n").map(item => ({
       question: item,
       category: "",
@@ -38,19 +41,40 @@ class Add extends Component {
     }));
   }
   addIQ = async ()=>{
-    let data = await apiserver.post('/iq',{userid:'laoxie',iq:this.state.result});
-    console.log('data:',data);
+    let {user} = this.props;
+    let result = await Api.post('/iq',{userid:user._id,iq:this.state.result});
+    
+    
+    message.success('添加面试题成功，感谢你的付出')
 
     this.setState({
       interviewQuestions:''
     });
     this.refs.iq.focus();
   }
+  getCategoryName = (code)=>{
+    if(!code) return "设置分类"
+    let current = this.state.category.filter(item=>item.code == code)[0]
+    return current.name;
+  }
+  async componentDidMount(){
+    //获取分类
+    let {data:category} = await Api.get('/category');
+    this.setState({
+      category
+    })
+  }
+  componentWillUnmount(){
+    // Api.cancel();
+  }
   componentWillUpdate(nextProps, nextState) {
     // console.log("componentWillUpdate:", nextState);
+    // 输入框与列表数据映射处理
     if (nextState.interviewQuestions != this.state.interviewQuestions) {
+      // 如何实现保留result原有数据（如category）
+      let newData = this.formatData(nextState.interviewQuestions);
       this.setState({
-        result: this.formatData(nextState.interviewQuestions)
+        result: newData
       });
     }
 
@@ -90,14 +114,14 @@ class Add extends Component {
                   overlay={
                     <Menu onClick={this.changeCategory.bind(this, idx)}>
                       {category.map(item => (
-                        <Menu.Item key={item}>{item}</Menu.Item>
+                        <Menu.Item key={item.code}>{item.name}</Menu.Item>
                       ))}
                     </Menu>
                   }
                   key="menu"
                 >
                   <Button size="small">
-                    {item.category ? item.category : "设置分类"}{" "}
+                    {this.getCategoryName(item.category)}
                     <Icon type="down" />
                   </Button>
                 </Dropdown>,

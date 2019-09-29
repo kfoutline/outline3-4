@@ -38,6 +38,7 @@ module.exports = {
                     options:{
                         presets:['@babel/react'],
                         plugins: [
+                            ['@babel/plugin-proposal-decorators',{legacy:true}],
                             '@babel/plugin-proposal-class-properties',
                             ["import", { 
                                 libraryName: "antd", 

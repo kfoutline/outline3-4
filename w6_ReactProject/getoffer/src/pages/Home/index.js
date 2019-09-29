@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Carousel, Row, Col } from "antd";
-import List from "@@/List";
+import Datalist from "@@/Datalist";
 import Api from "@/api";
 
 import './home.scss';
@@ -12,7 +12,6 @@ class Home extends Component {
     difficulty:[]
   };
   onChange() {
-    console.log(arguments);
   }
   goto = (id)=>{
     this.props.history.push(`/iq/${id}`);
@@ -26,6 +25,9 @@ class Home extends Component {
     let { data:difficulty } = await Api.get("/iq", {
       sort: "difficulty"
     });
+
+    difficulty = difficulty.result;
+    hotlist = hotlist.result;
 
     this.setState({
       hotlist,
@@ -47,9 +49,9 @@ class Home extends Component {
           })}
         </Carousel>
         <h3>热门面试题</h3>
-        <List data={hotlist} />
+        <Datalist data={hotlist} />
         <h3>重点难点面试题</h3>
-        <List data={difficulty} />
+        <Datalist data={difficulty} />
       </div>
     );
   }
