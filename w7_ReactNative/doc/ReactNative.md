@@ -68,21 +68,36 @@ React Native (简称RN)是Facebook于2015年4月开源的跨平台移动应用�
 React Native 看起来很像 React，只不过其基础组件是原生组件而非 web 组件
 
 ### 内置组件
-* View  容器
-* Image 图片
-    * source
-* Text  文本展示
-* TextInput 文本输入
-* Button    按钮
-* ScrollView    滚动容器
-* FlatList  长列表
-    >和ScrollView不同的是，FlatList并不立即渲染所有元素，而是优先渲染屏幕上可见的元素。
-    * data
-    * renderItem
-* SectionList 分组列表
-    * sections  数据属性
-    * renderSectionHeader 渲染标题
-    * renderItem    每条数据的渲染方式
+* 基础组件
+    * View  容器
+    * Image 图片
+        * source
+    * Text  文本展示
+    * ScrollView    滚动容器
+* 交互组件
+    * TextInput 文本输入
+        * onChangeText
+        * onSubmitEditing
+    * Button    按钮
+        * onPress
+    * Switch    开关按钮
+    * Picker
+* 列表组件
+    * FlatList  长列表
+        >和ScrollView不同的是，FlatList并不立即渲染所有元素，而是优先渲染屏幕上可见的元素。
+        * data
+        * renderItem
+    * SectionList 分组列表
+        * sections  数据属性
+        * renderSectionHeader 渲染标题
+        * renderItem    每条数据的渲染方式
+* Android & iOS特有组件
+    > 请查看官方文档
+* 其他组件
+    * ActivityIndicator 加载中
+    * Alert 消息提示窗
+    * WebView   显示web内容
+    * Animated 动画组件
 > 详情请查看官网 https://facebook.github.io/react-native/
 
 ### API
@@ -145,8 +160,40 @@ React Native 看起来很像 React，只不过其基础组件是原生组件而�
     ```bash
         keytool -genkeypair -v -keystore my-release-key.keystore -alias my-key-alias -keyalg RSA -keysize 2048 -validity 10000
     ```
+    >以上命令会再当前目录生成一个`my-release-key.keystore`密钥库文件，请记得妥善地保管好你的密钥库文件
     2. 设置 gradle 变量
+        * 把`my-release-key.keystore`文件放到你工程中的`android/app`文件夹下
+        * 编译`/android/gradle.properties`文件，添加以下代码：
+        ```js
+            MYAPP_RELEASE_STORE_FILE=my-release-key.keystore
+            MYAPP_RELEASE_KEY_ALIAS=my-key-alias
+            MYAPP_RELEASE_STORE_PASSWORD=*****
+            MYAPP_RELEASE_KEY_PASSWORD=*****
+        ```
     3. 把签名配置加入到项目的 gradle 配置中
+    >编辑你项目目录下的`android/app/build.gradle`，添加如下的签名配置：
+    ```config
+        android {
+            ...
+            defaultConfig { ... }
+            signingConfigs {
+                release {
+                    if (project.hasProperty('MYAPP_RELEASE_STORE_FILE')) {
+                        storeFile file(MYAPP_RELEASE_STORE_FILE)
+                        storePassword MYAPP_RELEASE_STORE_PASSWORD
+                        keyAlias MYAPP_RELEASE_KEY_ALIAS
+                        keyPassword MYAPP_RELEASE_KEY_PASSWORD
+                    }
+                }
+            }
+            buildTypes {
+                release {
+                    ...
+                    signingConfig signingConfigs.release
+                }
+            }
+        }
+    ```
     4. 打包
     ```bash
         # 进入android目录

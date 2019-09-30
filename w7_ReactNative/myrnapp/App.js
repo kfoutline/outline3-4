@@ -17,6 +17,8 @@ const instructions = Platform.select({
     "Shake or press menu button for dev menu"
 });
 
+import HelloWorld from './components/HelloWorld';
+
 type Props = {};
 export default class App extends Component {
   constructor(){
@@ -36,6 +38,7 @@ export default class App extends Component {
     console.log(666);
     return (
       <View style={styles.container}>
+        <HelloWorld/>
         <Text style={styles.welcome}>
           Hello, laoxie, Are you okey! Welcome to React Native!
         </Text>
