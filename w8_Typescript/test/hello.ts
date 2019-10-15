@@ -35,3 +35,21 @@ namespace  Test {
 
 console.log('username:',Test.username)
 let output = Test.identity<string>("myString");console.log(output)
+
+
+
+interface Person {
+    name: string;
+
+    // 可选属性
+    age?:number;
+
+    // 只读属性（只能在创建的时候被赋值）
+    readonly marry:boolean
+
+    // 任意属性
+    [propName: string]: any;
+
+}
+
+let user:Person = { name: "laoxie",marry:true,gender:'男'};
