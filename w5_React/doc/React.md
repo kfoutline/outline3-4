@@ -451,14 +451,21 @@ Babel解析规则：
     * 管理焦点，文本选择或媒体播放
     * 触发强制动画
     * 集成第三方 DOM 库
+* 设置方式
+    * React.createRef()
+    * 回调 Refs 
+        > `ref={el=>this.myRef=el}`
 ```js
-    <button ref="btnSave">保存</button>
+    // React.createRef()
+    this.btnSave = React.createRef();
+    <button ref={this.btnSave}>保存</button>
+    //获取节点
+    this.btnSave.current
 
-    //获取
-    this.refs.btnSave
-
-    //设置为实例属性
-    <button ref={form => {this.form = form}} />
+    //回调 Refs
+    <button ref={el => {this.btnSave = el}}>保存</button>
+    // 获取节点
+    this.btnSave
 ```
 
 
