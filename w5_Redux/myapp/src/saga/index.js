@@ -15,9 +15,10 @@ function* helloSaga(){
     yield console.log('hello saga');
 }
 
-function* testNum(){
+function* testNum(){console.log('ttt')
     // 副作用代码
-    yield delay(1000);
+    let res = yield 100;console.log('res:',res)
+    yield delay(1000);console.log('delay')
     yield put({type:'DO_TEST'})
 }
 

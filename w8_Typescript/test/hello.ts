@@ -53,3 +53,15 @@ interface Person {
 }
 
 let user:Person = { name: "laoxie",marry:true,gender:'男'};
+
+
+// let getData:(url:string,page:number)=>void = function(url:string,page:number):void{
+//     // ajax请求
+// }
+
+interface IgetData{
+    (url:string,page:number):void
+}
+let getData:IgetData = function(url:string,page:number):void{
+    // ajax请求
+}

@@ -10,7 +10,6 @@ React-router4（以下简称RR4）遵循React的设计万物皆组件的理念�
 * 组成部分:
   * react-router  核心，是浏览器和原生应用的通用部分，不提供dom操作进行跳转的api。
   * react-router-dom  基于浏览器环境的开发。
-  * react-router-native   基于react-native环境的开发。（了解）
 
 ## 安装
 
@@ -20,7 +19,7 @@ React-router4（以下简称RR4）遵循React的设计万物皆组件的理念�
   npm install react-router-dom --save
 ```
 
->安装 react-router-dom 或 react-router-native 时，都会自动将 react-router 作为依赖安装
+>安装 react-router-dom，都会自动将 react-router 作为依赖安装
 
 ## 常用组件
 
@@ -71,6 +70,7 @@ React-router4（以下简称RR4）遵循React的设计万物皆组件的理念�
   * pathname，跳转到的URL。
   * search，跳转后的url参数。此例中，跳转后的url是`http://127.0.0.1:9090/p2?p1=1&p2=2`
   * state，会保存在this.history.location.state中，可以用于传递数据
+* exact
 
 
 #### Switch
@@ -142,9 +142,6 @@ React-router4（以下简称RR4）遵循React的设计万物皆组件的理念�
 * to: string|object
  >同`<Link/>`
 
-* isActive: func
-通过返回值（boolean）决定导航是否激活，或者在导航激活时候做点别的事情。不管怎样，它不能决定对应页面是否可以渲染。
-
 
 ### 编程式导航
 
@@ -163,15 +160,13 @@ React-router4（以下简称RR4）遵循React的设计万物皆组件的理念�
 
 >高阶组件：一个包装函数
 
-* Context（了解，不推荐）
->RR4 在 Router 组件中通过Contex暴露了一个router对象，router对象下包含history（即：this.context.router.history）
 
 #### 路由的Enter与Leave
 
 >相比之前的版本，RR4有了很大的改变，废除了之前版本onEnter、onLeave等路由钩子函数，利用组件生命周期函数来替代
 
-* 使用componentDidMount或componentWillMount来代替onEnter
-* 使用componentDidUpdate 或 componentWillUpdate来代替onUpdate
+* 使用componentDidMount来代替onEnter
+* 使用componentDidUpdate来代替onUpdate
 * 使用componentWillUnmount来代替onLeave
 
 

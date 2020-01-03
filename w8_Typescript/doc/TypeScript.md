@@ -17,15 +17,18 @@ TypeScript由微软开发的自由和开源的编程语言，设计目标是开�
 
 ### 语言扩展
 
-* 类型注解和编译时类型检查（不指定则以类型推论规则指定变量类型）
-    > 格式：`var [变量名] : [类型] = 值;`
+* 类型注解和类型检查
+    > 格式：`var [变量名]:[类型] = 值`
     * string
     * number
     * boolean
     * null
     * undefined
+    * enum
+    * symbol
+    * void
     * any
-        > 任意类型：变量如果在声明的时候，未指定其类型，那么它会被识别为任意值类型
+        > 任意类型：变量如果在声明的时候，未指定其类型，那么它会被识别为any类型
 
     ```ts
         let username:string = 'laoxie';
@@ -33,26 +36,89 @@ TypeScript由微软开发的自由和开源的编程语言，设计目标是开�
 
         username = 123456;//在编译时报错
     ```
-* 数组
-```ts
-    let arr:number[] = [10,20,30]
-    let arr:Array<string> = ['laoxie','lemon','jingjing']
-```
-* 元组Tuple
-> 元组类型允许表示一个已知元素数量和类型的数组，各元素的类型不必相同
-```ts
-    let arr:[number,number,string] = [10,20,'h5']
-```
-
-* 函数
-    > 在ts中调用函数时，输入多余的（或者少于要求的）参数，是不被允许的
+* 联合类型
+    > 表示取值可以为多种类型中的一种
     ```ts
-        function getData(url:string,page:number):void{
-            // ajax请求
-        }
-        getData('/list');//报错
-        getData('/list',1,'get')
+        let age:number|string = 18;
+        let age:number|string = '18';
     ```
+
+* 类型别名
+    >给类型指定一个新的名字
+    ```ts
+        let ageType = number|string
+        let obj = {
+            age:ageType
+        }
+    ```
+
+* 类型推论
+    > 不指定则以类型推论规则指定变量类型
+    * 未赋值：推论为any类型（不对类型进行检查）
+    * 赋值：推论为值所属类型
+
+* 对象类型:接口
+    ```ts
+        interface Iuser {
+            username:string,
+            age:number
+        }
+        let laoxie:Iuser = {username:'laoxie',age:18}
+    ```
+
+* 数组类型
+    * 类型+[]
+    * 泛型
+    * 接口
+    ```ts
+        let arr:number[] = [10,20,30]
+        let arr:Array<string> = ['laoxie','lemon','jingjing']
+
+        interface Istate{
+            name:string,
+            price:number
+        }
+        interface IArr{
+            [index:number]:Istate
+        }
+        let arr:Istate[] = [{name:'iphone',price:998}]
+        let arr:Array<Istate> = [{name:'iphone',price:998}]
+        let arr:IArr = [{name:'iphone',price:998}]
+    ```
+
+* 元组Tuple
+    > 元组类型允许表示一个已知元素数量和类型的数组，各元素的类型不必相同
+    ```ts
+        let arr:[number,number,string] = [10,20,'h5']
+    ```
+
+* 函数类型
+    * 声明式函数
+        > 需要指定参数类型与返回值类型
+        ```ts
+            function getData(url:string,page:number):number{
+                // ajax请求
+                return page;
+            }
+            getData('/list');//报错,缺少参数
+            getData('/list',1,'get')// 报错，多余参数
+        ```
+    * 表达式函数
+        > 函数表达式除了指定function的类型，也需要指定变量的类型
+        ```ts
+            let getData:(url:string,page:number)=>void = function(url:string,page:number):void{
+                // ajax请求
+            }
+
+            // 使用接口指定类型
+            interface IgetData{
+                (url:string,page:number):void
+            }
+            let getData:IgetData = function(url:string,page:number):void{
+                // ajax请求
+            }
+        ```
+
     * 可选参数
     ```ts
         function getData(url:string,page?:number):void{
@@ -66,6 +132,8 @@ TypeScript由微软开发的自由和开源的编程语言，设计目标是开�
         }
     ```
 
+* 类型断言
+
 * 泛型编程
 > 可以适用于多个类型，格式：`Array<元素类型>`
 
@@ -78,33 +146,37 @@ TypeScript由微软开发的自由和开源的编程语言，设计目标是开�
 
 
 * 接口
-接口（Interfaces）可以用于对「对象的形状（Shape）」进行描述（对象类型判断）
-```ts
-    interface Person {
-        name: string;
+    > 接口（Interfaces）可以用于对「对象的形状（Shape）」进行描述（对象类型判断）
+    * 可选属性
+    * 只读属性
+    * 任意属性
+    ```ts
+        interface Person {
+            name: string;
 
-        // 可选属性
-        age?:number;
+            // 可选属性
+            age?:number;
 
-        // 只读属性（只能在创建的时候被赋值）
-        readonly marry:boolean
+            // 只读属性（只能在创建的时候被赋值）
+            readonly marry:boolean
 
-        // 任意属性
-        [propName: string]: any;
+            // 任意属性
+            [propName: string]: any;
 
-        // 方法定义
-        say();
-    }
+            // 方法定义
+            say();
+        }
 
-    function greeter(person: Person) {
-        // 传入的参数persion类型必须符合Person接口的描述
-        return "Hello, " + person.firstName + " " + person.lastName;
-    }
+        function greeter(person: Person) {
+            // 传入的参数persion类型必须符合Person接口的描述
+            return "Hello, " + person.firstName + " " + person.lastName;
+        }
 
-    let user = { name: "laoxie",marry:true};
+        let user = { name: "laoxie",marry:true};
 
-    greeter(user)
-```
+        greeter(user)
+    ```
+
 
 * 类
     * 定义`class`

@@ -207,6 +207,7 @@ MongoDB是一个基于分布式文件存储的数据库，由C++语言编写，�
 * 改（更新数据）
     * updateOne(query,newData)
     * updateMany(query,newData)
+    * save(document)
 
 ```js
     //更新指定字段

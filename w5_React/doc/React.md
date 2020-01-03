@@ -289,33 +289,29 @@ Babel解析规则：
 >所谓context，就是**上下文环境**，某个组件只要往自己的 context 里面放了某些状态，这个组件之下的所有子组件都直接访问这个状态(context好比组件的全局变量，能让所有子组件直接访问)
 
 * 实现步骤
-    1. 父组件Provider
-    2. 子组件
+    1. 创建Context：
+        ```js
+            let MyContext = React.createContext(initalValue)
+        ```
+    2. 父组件Provider
+        ```js
+            <MyContext.Provider value="dark">
+                //...
+            </MyContext.Provider>
+        ```
+        >如父组件未设置Provider，子组件接收时得到initalValue
+    3. 子组件接收
         * contextType
+            > 只适用于类组件，通过`this.context`获取
         * Consumer
-
-    ```js
-        // 定义与默认值
-        const MyContext = React.createContext('light');
-        // 父组件：提供value
-        <MyContext.Provider value="dark">
-            <Toolbar />
-        </MyContext.Provider>
-
-        // 子组件
-        // 1. 通过class.contextType获取
-        SubComponent.contextType = MyContext;
-        //或static contextType = MyContext;//需安装@babel/plugin-proposal-class-properties插件
-        render() {
-            return <Button theme={this.context} />;
-        }
-
-        // 2. 通过<MyContext.Consumer/>获取
-        //子组件
-        <MyContext.Consumer>
-        {value =>{/* 基于 context 值进行渲染*/} }
-        </MyContext.Consumer>
-    ```
+            ```js
+                <MyContext.Consumer>
+                    {value =>{
+                        // 回调函数中获取value值
+                        } 
+                    }
+                </MyContext.Consumer>
+            ```
 
 
 ### 高阶组件HOC（High Order Component）
@@ -383,6 +379,16 @@ Babel解析规则：
 ```
 >PS：需安装@babel/plugin-proposal-decorators插件
 
+## 列表渲染&key
+
+使用 JavaScript 的 map() 方法来创建列表
+
+### key
+
+>react利用key来区分组件的
+    * 相同的key表示同一个组件，react不会重新销毁创建组件实例，只可能更新；
+    * key不同，react会销毁已有的组件实例，重新创建组件新的实例
+* key应该是稳定唯一的，尽量不要用数组的索引index作为key（排序或添加时索引值会改变）
 
 ## 事件处理
 
@@ -469,36 +475,22 @@ Babel解析规则：
 ```
 
 
-## 列表&key
-
-使用 JavaScript 的 map() 方法来创建列表
-
-### key
-
->react利用key来区分组件的
-    * 相同的key表示同一个组件，react不会重新销毁创建组件实例，只可能更新；
-    * key不同，react会销毁已有的组件实例，重新创建组件新的实例
-* key应该是稳定唯一的，尽量不要用数组的索引index作为key（排序或添加时索引值会改变）
-
-
 ## 组件生命周期
 
->组件的生命周期分成三个状态：
-* Mounting：已插入真实 DOM
-* Updating：正在被重新渲染
-* Unmounting：已移出真实 DOM
+>组件的生命周期分成四个状态：
+* Initial: 初始化阶段
+* Mounting：挂载阶段
+* Updating：更新阶段
+* Unmounting：卸载阶段
 
 ![组件](./img/life.jpg "Optional title")
 
-React 为每个状态都提供了两种声明周期函数，will 函数在进入状态之前调用，did 函数在进入状态之后调用，三种状态共计五种处理函数
 
-* componentWillMount 
-    >在组件被渲染到页面上之前执行，在组件的整个生命周期内只执行一次
-
-   
+* componentWillMount （不推荐，V17.x版本中将移除）
+    >在组件被渲染到页面上之前执行
 
 * componentDidMount 
-    >组件被渲染到页面上后立马执行，在组件的整个生命周期内只执行一次。
+    >组件被渲染到页面上后立马执行
 
     - 这个时候是做如下操作的好时机：
         - 某些依赖组件 DOM 节点的操作
@@ -506,18 +498,18 @@ React 为每个状态都提供了两种声明周期函数，will 函数在进入
         - 设置 setInterval、setTimeout 等计时器操作
         - 读取本地存储数据
 
-* componentWillUpdate(nextProps, nextState)
+* componentWillUpdate(nextProps, nextState) （不推荐，V17.x版本中将移除）
     >在初始化时不会被调用，可能在以下两种情况下被调用：
     * 当组件 shouldComponentUpdate 返回 true 且接收到新的props或者state但还没有render时被调用
-    * 或者调用 forceUpdate 时将触发此函数
+    * 调用 forceUpdate 时将触发此函数
 
-* componentDidUpdate(nextProps, nextState)
+* componentDidUpdate(prevProps, prevState)
     >在组件完成更新后立即调用。在初始化时不会被调用。
 
     * 在此处是做这些事情的好时机：
         * 执行依赖新 DOM 节点的操作。
-        * 依据新的属性发起新的网络请求。
-        >注意：一定要在确认属性变化后再发起ajax请求，否则极有可能进入死循环：DidUpdate -> ajax -> changeProps -> DidUpdate -> ...）
+        * 依据新的属性发起新的ajax请求。
+        >注意：一定要在确认属性变化后再发起ajax请求，否则极有可能进入死循环：DidUpdate -> ajax -> changeState -> DidUpdate -> ...）
 
 * componentWillUnmount
     >在组件从 DOM 中移除之前立刻被调用。
@@ -527,15 +519,15 @@ React 为每个状态都提供了两种声明周期函数，will 函数在进入
         - 终止ajax请求
 
 
-* componentWillReceiveProps(nextProps)
-    >该方法在初始化render时不会被调用，可能在以下两种情况下被调用：
-    * 组件接收到了新的属性。新的属性会通过 nextProps 获取到。
+* componentWillReceiveProps(nextProps) （不推荐，V17.x版本中将移除）
+    >该方法在以下两种情况下被调用：
+    * 组件接收到了新的props属性。新的属性会通过 nextProps 获取到。
     * 组件没有收到新的属性，但是由于父组件重新渲染导致当前组件也被重新渲染。
 
 * shouldComponentUpdate(nextProps, nextState)
-    >需要返回一个布尔值来决定是否重新渲染组件，在组件接收到新的props或者state时被调用。
+    >在props改变或state改变时被调用，必须返回true或false来决定给是否重新渲染组件
     * 在初始化时或者使用forceUpdate时不被调用。
-    * 可以在你确认不需要更新组件时使用。
+    * 一般用于性能优化
 
     ```js
          //在render函数调用前判断：如果前后state中num不变，通过return false阻止render调用
@@ -546,7 +538,7 @@ React 为每个状态都提供了两种声明周期函数，will 函数在进入
         }
     ```
 
->PS：这是一个询问式的生命周期函数，如果返回true，组件将触发重新渲染过程，如果返回false 组件将不会触发重新渲染。因此，合理地利用该函数可以一定程度节省开销，提高系统的性能
+    >PS：这是一个询问式的生命周期函数，如果返回true，组件将触发重新渲染过程，如果返回false 组件将不会触发重新渲染。因此，合理地利用该函数可以一定程度节省开销，提高系统的性能
 
 ---
 

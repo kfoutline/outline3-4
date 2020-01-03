@@ -4,7 +4,8 @@ import Home from './pages/Home.jsx';
 
 import TodoList from './pages/TodoList';
 
-// import Cart from './pages/Cart.tsx';
+import Cart from './components/MyHook/Cart';
+import Goods from './components/MyHook/Goods';
 
 // function App(){
 //     return <div>
@@ -40,6 +41,11 @@ class App extends React.Component{
             <p>666</p>
         </Home>
         {this.state.username}
+        <TodoList/>
+
+        <Cart/>
+
+        <Goods/>
     </div>
     }
 }

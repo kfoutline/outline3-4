@@ -9,6 +9,7 @@
     </div>
      <el-button type="primary">主要按钮</el-button>
     <router-view/>
+    <myEcharts/>
   </div>
 </template>
 <script>
@@ -16,7 +17,7 @@ import Vue from 'vue';
 import {Row,Button} from 'element-ui';
 Vue.use(Button);
 Vue.use(Row);
-
+import myEcharts from './components/myEcharts.vue'
 
 export default {
   async mounted(){
@@ -28,6 +29,9 @@ export default {
         resolve(123)
       },1000)
     })
+  },
+  components:{
+    myEcharts
   }
 }
 </script>

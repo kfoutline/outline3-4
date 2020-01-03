@@ -4,16 +4,22 @@ import MyContext from './context';
 
 class TodoItem extends Component{
     constructor(props,context){
-        super(props,context);
-        console.log(props,context)
+        super();
     }
     render(){
-        
-        return <MyContext.Consumer>
-            {value=>{
-                return <button>按钮,{value}</button>
-            }}
-            </MyContext.Consumer>
+        let {item,idx,selectItem} = this.props
+        return (
+        <div onClick={selectItem.bind(null,item.id)}>
+            {idx+1} <input type="checkbox" checked={item.selected} onClick={(e)=>e.stopPropagation()} onChange={()=>{
+                selectItem(item.id)
+            }}/>
+        </div>
+        // <MyContext.Consumer>
+        //     {value=>{
+        //         return <button>按钮,{value}</button>
+        //     }}
+        //     </MyContext.Consumer>
+        )
     }
 }
 
