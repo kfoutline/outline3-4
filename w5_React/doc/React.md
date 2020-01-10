@@ -24,12 +24,12 @@ React官网地址：http://facebook.github.io/react/
 ### script标签引入
 * react.js          React 的核心库
 * react-dom.js      提供与 DOM 相关的功能
-* babel.js          React使用ES6语法和浏览器不支持的JSX语法，所以必须引用Babel进行编译
->在浏览器中使用 Babel 来编译 JSX 效率是非常低的
+* browser.js        babel针对于浏览器环境的版本，可将JSX、ES6+等语法编译成浏览器支持的代码
+>在浏览器中使用 Babel 来编译 JSX为实时编译， 效率是非常低的，一般只用于演示
 
 ### 通过脚手架快速搭建React环境
 
->create-react-app 是来自于官方 Facebook的脚手架工具，通过该命令我们无需配置就能快速构建 React 开发环境
+> create-react-app，简称CRA， 是来自于官方 Facebook的脚手架工具，通过该命令我们无需配置就能快速构建 React 开发环境
 
 * 安装create-react-app
 ```bash
@@ -41,10 +41,8 @@ React官网地址：http://facebook.github.io/react/
     create-react-app my-app
 ```
 
-### 通过webpack手动搭建React环境
-
->通过webpack + es6来使用react，所以需要安装以下模块来搭建环境
-
+### 手动搭建基于Webpack的React环境
+> 需要安装以下模块
 * react & react-dom
 * babel-loader & @babel/core & @babel/preset-react
 * webpack & webpack-cli & webpack-dev-server
@@ -52,33 +50,17 @@ React官网地址：http://facebook.github.io/react/
 
 ## 使用
 
-### 虚拟DOM（Virtual DOM）
+### 渲染
 
-在Web开发中，我们总需要将变化的数据实时反应到UI上，这时就需要对DOM进行操作。而复杂或频繁的DOM操作通常是性能瓶颈产生的原因（如何进行高性能的复杂DOM操作通常是衡量一个前端开发人员技能的重要指标）。React为此引入了虚拟DOM（Virtual DOM）的机制，根据 React 的设计，所有的 DOM 变动，都先在虚拟 DOM 上发生，然后再将实际发生变动的部分反映在真实 DOM上，这就是DOM diff算法（可以极大提高网页的性能）
-
-<img src="img/dom.png" style="width:320px;">
-<img src="img/virtualDOM.png" style="width:500px;">
-
->什么是虚拟DOM：结构类似于DOM树的 JavaScript 对象
-* 创建虚拟节点：React.createElement(component, props, ...children)
-
-
-```javascript
-    //测试以下节点操作代码花费时间，并尝试优化它
-    for(let i=0;i<10000;i++){
-        let btn = document.querySelector('.btn');
-        let num = btn.innerText;
-        btn.innerText = ++num;
-    }
-```
-
-### UI渲染
-
-* ReactDOM.render(template,targetDOM)
-    >是React的最基本方法，用于将模板转为HTML语言，并插入指定的DOM节点
-
-    - template：可以是HTML标签或 React 组件
-    - targetDOM：挂载点，必须为元素节点
+* ReactDOM.render(content,target)
+    >是ReactDOM的最基本方法，用于将内容渲染到指定节点中
+    - content：可以是HTML标签或 React 组件
+    - target：挂载点，必须为元素节点
+* React.createElement(type,props,children)
+    > 用于创建虚拟节点
+    * type: 节点名称
+    * props: 节点属性
+    * children: 节点内容
 
 ### JSX语法
 一种特殊的js语法，是ECMAScript的扩展，可以让我们在js代码中直接使用html标签，再通过编译器（Babel）转成标准的 JavaScript 后由浏览器执行。
@@ -121,32 +103,32 @@ Babel解析规则：
 
 ### 组件定义
 
-* 函数组件（无状态组件、受控组件、UI组件）
-    >纯展示组件，这种组件只负责根据外部传入的props来展示，书写更简洁，执行效率更高
+#### 函数组件（无状态组件、受控组件、UI组件）
+>纯展示组件，这种组件只负责根据外部传入的props来展示，书写更简洁，执行效率更高
 
-    - 特点
-        - 只根据传入的props属性展示不同的UI效果
-        - 组件不会被实例化，整体渲染性能得到提升
-        - 组件不能访问this对象
-        - 组件无法访问生命周期的方法
+- 特点
+    - 只根据传入的props属性展示不同的UI效果
+    - 组件不会被实例化，整体渲染性能得到提升
+    - 组件不能访问this对象
+    - 组件无法访问生命周期的方法
 
-    >PS：无状态组件被鼓励在大型项目中尽可能以简单的写法来分割原本庞大的组件，未来React也会这种面向无状态组件在譬如无意义的检查和内存分配领域进行一系列优化，所以只要有可能，尽量使用无状态组件。
+>PS：无状态组件被鼓励在大型项目中尽可能以简单的写法来分割原本庞大的组件，未来React也会这种面向无状态组件在譬如无意义的检查和内存分配领域进行一系列优化，所以只要有可能，尽量使用无状态组件。
 
-    ```js
-        //定义
-        function MyComponent(props){
-            return <h1>函数组件</h1>
-        }
+```js
+    //定义
+    function MyComponent(props){
+        return <h1>函数组件</h1>
+    }
 
-        //使用
-        ReactDOM.render(
-            <MyComponent myname="laoxie" />,
-            document.getElementById('app')
-        );
-    ```
+    //使用
+    ReactDOM.render(
+        <MyComponent myname="laoxie" />,
+        document.getElementById('app')
+    );
+```
 
-* 类组件（有状态组件、非受控组件、容器组件）
->类继承组件有更丰富的特性（state状态、生命周期等）
+#### 类组件（有状态组件、非受控组件、容器组件）
+> 类继承组件有更丰富的特性（state状态、生命周期等）
 
 ```js
     class About extends React.Component{
@@ -160,17 +142,66 @@ Babel解析规则：
     }
 ```
 
+* 组件状态state
+    > React类组件拥有自己的状态state，state状态改变时自动执行组件中的render方法渲染视图（自动刷新）
+
+    * 初始状态
+    ```js
+        class MyComponent extends React.Component {
+            constructor() {
+                super(); // 这行代码不能少哦
+                this.state = {
+                    isLiked: false
+                }
+            }
+        }
+    ```
+
+    * 修改状态：setState() 
+        * 格式：`setState(nextState[,callback])`
+            - nextState: 将要设置的新状态，该状态会和当前的state合并
+            - callback: 可选参数，回调函数。该函数会在setState设置成功，且组件重新渲染后调用。
+
+        * 依赖上次setState的结果
+        >格式：`setState(fn [,callback])`
+            * fn(prevState)
+
+            ```js
+                this.setState(prevState=>{
+                    return {num:prevState.num+1}
+                })
+            ```
+        * 多次setState()合并
+        > React内部自动进行state的对比，得到最终结果后才渲染视图，所以并不需要担心多次进行 setState 会带来性能问题
+
+        >PS：调用setState()并不会马上修改 state。而是进入到一个更新队列里面，所以不能在组件内部通过`this.state.xx=xx`直接修改状态，因为修改后会被队列中的setState()替换（如下两次输出都为false）
+
+        ```js
+            console.log(this.state.isLiked);//false
+            this.setState({
+                isLiked: true
+            });
+            console.log(this.state.checked);//false
+        ```
+
+* 强制更新组件
+> 格式：forceUpdate(callback)
+
+`this.forceUpdate()`方法会使组件调用自身的render()方法重新渲染组件，组件的子组件也会调用自己的render()，一般来说，应该尽量避免使用forceUpdate()
 
 
-### 组件属性props
 
->是一个对象，包含使用组件时的所有属性，属性必须为只读的，这一点非常重要，请严格遵守
+### 组件通讯
+
+#### 父传子：props
+
+> props是一个对象，包含使用组件时的所有属性，属性必须为只读的，这一点非常重要，请严格遵守
 
 * 获取方式
     - 函数组件：通过参数props访问
     - 类组件：通过this.props访问
 
-* 定义默认属性：defaultProps
+* props默认值：defaultProps
 >通常情况下，我们需要为组件的某些属性设定默认值。就像 HTML 标签的属性也有默认值一样，（如 form 标签的 method 属性默认值是 GET，input 标签的 type 属性默认值是 text ）
 
     ```js
@@ -185,10 +216,10 @@ Babel解析规则：
         }
     ```
 
-* 属性的类型及校验（用于限制传入属性的数据类型）
-    >给组件设置静态字段 propTypes 来设置组件各个属性的类型检查器
+* props类型校验
+    > 给组件设置静态属性 propTypes 来设置组件各个属性的类型检查器, 用于限制传入属性的数据类型
 
-    - React 内置数据类型检查器
+    * React 内置数据类型检查器PropTypes
     >在React 16版本之后, PropTypes 从react包 分离到了prop-types 包中
     ```js
         import PropTypes from 'prop-types';
@@ -197,7 +228,7 @@ Babel解析规则：
         }
     ```
 
-    - 自定义属性验证器
+    * 自定义属性验证器
     ```js
         MyComponent.propTypes = {
             //自定义验证规则
@@ -209,110 +240,69 @@ Babel解析规则：
         }
     ```
 
+#### 子传父
+> 把父组件函数传递到子组件执行的方式
 
-### 组件状态state
+#### 多层次组件通讯
 
->React会在state状态改变后自动执行组件中的render方法渲染视图
-
-* 初始状态
-```js
-    class MyComponent extends React.Component {
-        constructor() {
-            super(); // 这行代码不能少哦
-            this.state = {
-                isLiked: false
-            }
-        }
-    }
-```
-
-* 修改状态setState: 
-    * 格式：`setState(nextState[,callback])`
-        - nextState: 将要设置的新状态，该状态会和当前的state合并
-        - callback: 可选参数，回调函数。该函数会在setState设置成功，且组件重新渲染后调用。
-
-    * 依赖上次setState的结果
-    >格式：`setState(fn [,callback])`
-        * fn(prevState)
-
-        ```js
-            this.setState(prevState=>{
-                return {num:prevState.num+1}
-            })
-        ```
-    * 多次setState()合并
-    > React内部自动进行对比，得到最终结果后才渲染视图，所以并不需要担心多次进行 setState 会带来性能问题
-
-    >PS：调用setState()并不会马上修改 state。而是进入到一个更新队列里面，所以不能在组件内部通过`this.state.xx=xx`直接修改状态，因为修改后会被队列中的setState()替换（如下两次输出都为false）
-
-    ```js
-        console.log(this.state.isLiked);//false
-        this.setState({
-            isLiked: true
-        });
-        console.log(this.state.checked);//false
-    ```
-
-* 强制更新组件
->格式：forceUpdate(callback)
-
-    forceUpdate()方法会使组件调用自身的render()方法重新渲染组件，组件的子组件也会调用自己的render()，一般来说，应该尽量避免使用forceUpdate()，而仅从this.props和this.state中读取状态并由React触发render()调用
-
-### state VS props
-
->一个组件的 state 中的数据可以通过 props 传给子组件，一个组件可以使用外部传入的 props 来初始化自己的 state。但是它们的职责其实非常明晰分明：**state 是让组件控制自己的状态，props 是让外部对组件自己进行配置**
+* props逐层传递
+    > 从上到下，所有的组件都要帮助传递这个 props到目标位置
+    * 缺点：
+        - 操作繁琐
+        - 难以维护
 
 
-### 组件通讯
+* context组件共享
+    > 所谓context，就是**上下文环境**，某个组件只要往自己的 context 里面放了某些状态，这个组件之下的所有子组件都能直接访问这个状态
 
-#### props逐层传递
-
->从上到下，所有的组件都要帮助传递这个 props到目标位置
-
-* 缺点：
-    - 操作繁琐
-    - 难以维护
-
-#### 显示组件内容`props.children`
-
->获取双标签组件的内容，返回值如下
-
-* 无内容：Undefined
-* 文字内容：String
-* 单个标签：Object
-* 多个标签：Array
-
->PS：可利用 React.Children对象下的方法进行操作
-
-#### context组件共享
-
->所谓context，就是**上下文环境**，某个组件只要往自己的 context 里面放了某些状态，这个组件之下的所有子组件都直接访问这个状态(context好比组件的全局变量，能让所有子组件直接访问)
-
-* 实现步骤
-    1. 创建Context：
-        ```js
-            let MyContext = React.createContext(initalValue)
-        ```
-    2. 父组件Provider
-        ```js
-            <MyContext.Provider value="dark">
-                //...
-            </MyContext.Provider>
-        ```
-        >如父组件未设置Provider，子组件接收时得到initalValue
-    3. 子组件接收
-        * contextType
-            > 只适用于类组件，通过`this.context`获取
-        * Consumer
+    * 实现步骤
+        1. 创建Context：
             ```js
-                <MyContext.Consumer>
-                    {value =>{
-                        // 回调函数中获取value值
-                        } 
-                    }
-                </MyContext.Consumer>
+                let defaultValue = {username:'laoxie'}
+                let MyContext = React.createContext(defaultValue)
             ```
+        2. 父组件Provider
+            ```js
+                let data = {username:'jingjing'}
+                <MyContext.Provider value={data}>
+                    //...
+                </MyContext.Provider>
+            ```
+            >如父组件未设置Provider，子组件接收时得到defaultValue
+        3. 子组件接收
+            * contextType
+                > 只适用于类组件，通过`this.context`获取
+                ```js
+                    SubComponent.contextType = MyContext;
 
+                    this.context.username;//jingjing
+                ```
+            * Consumer
+                ```js
+                    <MyContext.Consumer>
+                        {value =>{
+                            // 回调函数中获取value值
+                            } 
+                        }
+                    </MyContext.Consumer>
+                ```
+
+#### 组件内容通讯
+* props.children
+    >获取双标签组件的内容，返回值如下（可利用 React.Children对象下的方法进行操作）
+    * 无内容：Undefined
+    * 文字内容：String
+    * 单个标签：Object
+    * 多个标签：Array
+
+* Render Props
+> 任何被用于告知组件需要渲染什么内容的函数 prop 在技术上都可以被称为 “render prop”
+```js
+    function MyComponent(props){
+        return {props.render()}
+    }
+    <MyComponent render={()=><button>点我</button>}/>
+```
 
 ### 高阶组件HOC（High Order Component）
 
@@ -391,61 +381,79 @@ Babel解析规则：
 * key应该是稳定唯一的，尽量不要用数组的索引index作为key（排序或添加时索引值会改变）
 
 ## 事件处理
+> 采用驼峰式写法（如：onClick,onKeyDown）
 
-* 采用驼峰式写法（如：onClick,onKeyDown）
-
-### event对象与事件处理函数传参
+### event对象与传参
 
 * 默认绑定方式
     + 事件处理函数的第一个参数为event对象（与原生js一致）
     + 无法传递其他参数
     ```js
         //定义
-        clickHandler(e){
+        clickHandle(e){
             console.log(e);
         }
 
         //使用
-        <button onClick={this.clickHandler}>按钮</button>
+        <button onClick={this.clickHandle}>按钮</button>
     ```
 * bind方式
     + event对象会在所有参数后隐式传递
     ```js
         //定义
-        clickHandler(num1,num2,e){
+        clickHandle(num1,num2,e){
             console.log(num1,num2,e);
         }
 
         //使用
-        <button onClick={this.clickHandler.bind(this,10,20)}>按钮</button>
+        <button onClick={this.clickHandle.bind(this,10,20)}>按钮</button>
     ```
 * 使用箭头函数调用
     + event对象需要手动传递
     + 可以传递其他参数
     ```js
         //定义
-        clickHandler(e,num){
+        clickHandle(e,num){
             console.log(e,num);
         }
 
         //使用
-        <button onClick={e=>this.clickHandler(e,10)}>按钮</button>
+        <button onClick={e=>this.clickHandle(e,10)}>按钮</button>
     ```
 
 ### 事件处理函数中的this指向
 
 ```js
-    <button onClick={this.clickHandler}>按钮</button>
+    <button onClick={this.clickHandle}>按钮</button>
 ```
 
 >以上clickHandler被调用时，内部的this不指向组件实例，也不指向button元素，而是得到undefined，如果需要用到this需要使用以下方式改变this指向
 
 * bind方法
-    + 执行时bind
-    + 初始化时bind
+    * 执行时bind
+    * 初始化时bind (推荐)
+    ```js
+        class MyComponent extends React.Component{
+            constructor(props){
+                super(props);
+                this.clickHandle = this.clickHandle.bind(this)
+            }
+            clickHandle(){
+
+            }
+        }
+    ```
 * 使用箭头函数
-    + 定义时使用箭头函数
-    + 执行时使用箭头函数
+    * 定义时使用箭头函数
+    ```js
+        class MyComponent extends React.Component{
+            // 需要插件支持：@babel/plugin-proposal-class-properties
+            clickHandle = ()=>{
+                
+            }
+        }
+    ```
+    * 执行时使用箭头函数
 
 ## refs
 
@@ -544,14 +552,21 @@ Babel解析规则：
 
 【案例】
 
-* 名片切换
-* 走动的时钟
 * 待办事项todolist
 
 【练习】
 
-* 利用组件布局一个页面（Header,Main,Footer）
-    - Header组件中有Logo和Nav组件
-    - Main组件分左右布局（Side侧栏、Content内容）
+* 利用组件布局一个后台管理系统页面，必须包含以下模块
+    * Header
+        * Logo  标识
+        * Nav   主导航
+    * Main
+        * Side  侧栏
+        * Breadcrumb    面包屑导航
+        * Content   内容
+    * Footer
+    <p>
+    <img src="./img/练习1.png" style="width:600px"/>
+    </p>
 
 

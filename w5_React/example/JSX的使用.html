@@ -7,11 +7,11 @@
     <title>Document</title>
     <script src="../node_modules/react/umd/react.development.js"></script>
     <script src="../node_modules/react-dom/umd/react-dom.development.js"></script>
-    <script src="../node_modules/@babel/preset-react/lib/index.js"></script>
+    <script src="../node_modules/babel-core/browser.js"></script>
 </head>
 <body>
     <div id="app"></div>
-    <script>
+    <script type="text/babel">
     ReactDOM.render(
         <div>1234</div>,
         document.querySelector('#app')
